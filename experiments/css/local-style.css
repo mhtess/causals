@@ -47,3 +47,15 @@
 .question1{
   font-size: 20px;
 }
+
+.slider_number {
+  margin: 0px;
+}
+
+#speaker_choices{
+  margin-bottom: 40px;
+}
+
+input[type="radio"]{
+  margin: 0 5px 0 30px;
+}

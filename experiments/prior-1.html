@@ -105,25 +105,39 @@
       </tr>
     </table>
 
-    <br>
-
     <p class="question0"></p>
-
     <table id="slider_table0" class="slider_table">
       <tr><td class="left">unlikely</td><td class="right">likely</td></tr>
       <tr><td colspan="2"><div id="single_slider0" class="slider"></div></td></tr>
     </table>
 
     <p class="question1"> </p>
-
-    <p class="slider_number"></p>
+    <p class="slider_number" id="prior_number"></p>
     <table id="slider_table1" class="slider_table">
       <tr><td class="left">0</td><td class="right">99</td></tr>
       <tr><td colspan="2"><div id="single_slider1" class="slider"></div></td></tr>
     </table>
 
+    <p class="task_prompt"> </p>
+    <p class="question2"> </p>
+
+    <p class="slider_number" id="listener_number"></p>
+    <table id="slider_table2" class="slider_table">
+      <tr><td class="left">0</td><td class="right">100</td></tr>
+      <tr><td colspan="2"><div id="single_slider2" class="slider"></div></td></tr>
+    </table>
+
+    <div id="speaker_choices">
+      <label>
+        <input type="radio"  name="speaker" value="No"/>No
+      </label>
+      <label>
+        <input type="radio"  name="speaker" value="Yes"/>Yes
+      </label>
+    </div>
+
     <button onclick="_s.button()">Continue</button>
-    <p class="err">Please respond to both questions.</p>
+    <p class="err">Please respond to the questions.</p>
 
   </div>
 

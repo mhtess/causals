@@ -49,7 +49,23 @@ function make_slides(f) {
     present : exp.stims,
     //this gets run only at the beginning of the block
     present_handle : function(stim) {
-      // debugger;
+      // show prior questions and responses
+      $(".question0").show();
+      $("#slider_table0").show();
+      $(".question1").show();
+      $("#slider_table1").show();
+
+      // hide listener/speaker question
+      $(".question2").hide();
+      $(".task_prompt").hide();
+      // hide listener task responses
+      $("#listener_number").hide();
+      $("#slider_table2").hide();
+      // hide speaker task responses
+      $("#speaker_choices").hide();
+
+      this.switch = true;
+
       this.startTime = Date.now();
       $(".err").hide();
 
@@ -83,7 +99,8 @@ function make_slides(f) {
       this.init_sliders(this.n_sliders);
       // exp.sliderPost = [];
       exp.sliderPost = utils.fillArray(-1,this.n_sliders);//[];
-      $(".slider_number").html("---")
+      $("#prior_number").html("---");
+      $("#listener_number").html("---");
 
     },
 
@@ -91,17 +108,43 @@ function make_slides(f) {
       for (var i=0; i<n_sliders; i++) {
         utils.make_slider("#single_slider" + i, this.make_slider_callback(i));
       }
+      utils.make_slider("#single_slider2", this.make_slider_callback(2));
+
     },
     make_slider_callback : function(i) {
       return function(event, ui) {
         exp.sliderPost[i] = ui.value == 1 ? 0.99 : ui.value;
-        (i==1) ? $(".slider_number").html(Math.round(exp.sliderPost[i]*100)+"") : null
+        (i==1) ? $("#prior_number").html(Math.round(exp.sliderPost[i]*100)+"") :
+        (i==2) ? $("#listener_number").html(Math.round(exp.sliderPost[i]*100)+"") : null
       };
     },
 
     button : function() {
       if (exp.sliderPost.indexOf(-1)>-1) {
         $(".err").show();
+      } else if (this.switch) {
+        $(".err").hide();
+        // hide prior questions and responses
+        $(".question0").hide();
+        $("#slider_table0").hide();
+        $(".question1").hide();
+        $("#slider_table1").hide();
+        $("#prior_number").hide();
+
+        // show speaker/listener questions and responses
+        $(".task_prompt").html(tasks[exp.condition]["utterance"]);
+        $(".question2").html(tasks[exp.condition]["query"]);
+        $(".task_prompt").show();
+        $(".question2").show();
+        if (exp.condition == "speaker"){
+          $("#speaker_choices").show();
+        } else if (exp.condition == "listener"){
+          $("#listener_number").show();
+          $("#slider_table2").show();
+        }
+
+        this.switch = false;
+
       } else {
         this.rt = Date.now() - this.startTime;
         this.log_responses();
@@ -400,17 +443,11 @@ function init() {
 
   exp.trials = [];
   exp.catch_trials = [];
-  // exp.nTrials = 12;
-  // exp.propTypes = [
-  //                 "accidental",
-  //                 "dangerous",
-  //                 "vaguelong",
-  //                 "color",
-  //                 "part"]
 
+  exp.condition = _.sample(["speaker","listener"])
 
-exp.nTrials = 30;
-exp.propTypes = ["part","accidental","disease","color","vague"]
+  exp.nTrials = 30;
+  exp.propTypes = ["part","accidental","disease","color","vague"]
 
 var stimArray = _.shuffle(_.flatten(_.map(exp.propTypes,
   function(type){
@@ -432,43 +469,6 @@ exp.stims =_.map(_.zip(creatures, stimArray),
   })
 
 exp.stimscopy = exp.stims.slice(0);
-
-
-
-// var i,j,chunk = exp.nTrials/exp.propTypes.length;
-// var stimArray=[]
-// var shufStims = _.shuffle(stimsForPrior3)
-
-// for (i=0,j=shufStims.length; i<j; i+=chunk) {
-//     stimArray.push(shufStims.slice(i,i+chunk));
-// }
-
-// var properties = _.shuffle(_.flatten(_.map(
-//   _.zip(exp.propTypes,stimArray),
-//   function(typeAndStims){
-//     var substims = typeAndStims[1]
-//     var type = typeAndStims[0]
-//     return _.map(substims,
-//       function(s){
-
-//         var postfix = (type=="color" || type=='accidental') ? " "+s.part : ""
-//         return {property: s[type]+postfix,
-//                 type: type}
-//       }
-//       )
-//   }
-//   )
-// ))
-//   var creatures = _.map(_.shuffle(creatureNames).slice(0,exp.nTrials),
-//     function(x){return {category: x.category, exemplar: x.exemplar}}
-//     )
-
-// exp.stims =_.map(_.zip(creatures, properties),
-//   function(cp){
-//     return _.extend(cp[1], cp[0])
-//   })
-//     exp.stimscopy = exp.stims.slice(0);
-
 
   exp.system = {
       Browser : BrowserDetect.browser,

@@ -1,3 +1,15 @@
+var tasks = {
+  speaker: {
+    utterance: [10, 30, 50, 70, 90],
+    query: "Chemical X makes the plants grow."
+  },
+  listener: {
+    utterance: "Chemical X makes the plants grow.",
+    query: "How many out of 100 plants do you think successfully made the plants grow?"
+  }
+}
+
+
 var stimuli = [
   {
     distribution: "rare",
@@ -19,10 +31,17 @@ var stories = [
     prevalenceQuestion: "We know now that at least 1 EXEMPLAR was successfully grown.<br> How many of the remaining 99 do you think will successfully grow?\n"
   },
   {
-    story: "weather",
+    story: "breadrise (with yeast)",
     storyline:  "On this planet, there is an edible plant called CATEGORY and your team has to figure out how CATEGORY grow. Your team runs 11 experiments, trying to grow CATEGORY with 11 different chemical compounds. In each experiment, your team fed 100 plants with 1 of the compounds to see how many of the 100 plants would grow. The number of plants (out of 100) that were successfully grown in the first 10 experiments are shown below.",
     existentialQuestion: "The experiment with the 11th compound is finishing.<br> How likely do you think it is that this chemical will grow <emph>at least 1 EXEMPLAR?",
     prevalenceQuestion: "We know now that at least 1 EXEMPLAR was successfully grown.<br> How many of the remaining 99 do you think will successfully grow?\n"
+  },
+  {
+    story: "kitting germs (with soap)"
+  },
+  {
+    story: "babies stopped crying",
+
   }
 ]
 
