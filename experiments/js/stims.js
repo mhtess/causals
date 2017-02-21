@@ -1,10 +1,13 @@
 var tasks = {
   speaker: {
-    utterance: [10, 30, 50, 70, 90],
-    query: "Chemical X makes the plants grow."
+    frequencies: [10, 30, 50, 70, 90],
+    prompt: "The experiment with the 11th compound has finished.",
+    utterance: "The 11th compound makes the plants grow.",
+    query: "Does the 11th compound make the plants grow?"
   },
   listener: {
     utterance: "Chemical X makes the plants grow.",
+    prompt: "The experiment with the 11th compound has finished.",
     query: "How many out of 100 plants do you think successfully made the plants grow?"
   }
 }

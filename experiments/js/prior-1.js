@@ -120,7 +120,7 @@ function make_slides(f) {
 
     button : function() {
       var speakerResponse = $('input[name="speaker"]:checked').val();
-
+      var prompt, utt;
       if (exp.sliderPost.indexOf(-1)>-1) {
         $(".err").show();
       } else if (this.switch) {
@@ -133,19 +133,27 @@ function make_slides(f) {
         $("#prior_number").hide();
 
         // show speaker/listener questions and responses
-        $(".task_prompt").html(tasks[exp.condition]["utterance"]);
+
         $(".question2").html(tasks[exp.condition]["query"]);
         $(".task_prompt").show();
         $(".question2").show();
-
+        prompt = tasks[exp.condition]["prompt"]
         if (exp.condition == "speaker"){
+          prompt +=  "<br> The number of plants that were successfully grown (out of 100) with the 11th compound were:" + tasks.speaker.frequencies
+
+          utt = 'Your colleague asks you: "' + tasks.speaker.query + '"';
           $("#speaker_choices").show();
         } else if (exp.condition == "listener"){
+          prompt = tasks[exp.condition]["prompt"];
+          utt = 'Your colleague tells you: "' + tasks.speaker.utterance + '"<br>' +
+          tasks.listener.query;
           $("#listener_number").html("---");
           $("#listener_number").show();
           $("#slider_table2").show();
         }
 
+        $(".task_prompt").html(prompt);
+        $(".question2").html(utt);
         this.switch = false;
 
       } else if (!(exp.sliderPost[2]) && (!speakerResponse)) {
