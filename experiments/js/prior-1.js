@@ -54,6 +54,7 @@ function make_slides(f) {
       $("#slider_table0").show();
       $(".question1").show();
       $("#slider_table1").show();
+      $("#prior_number").html("---");
 
       // hide listener/speaker question
       $(".question2").hide();
@@ -63,6 +64,7 @@ function make_slides(f) {
       $("#slider_table2").hide();
       // hide speaker task responses
       $("#speaker_choices").hide();
+      $('input[name="speaker"]').prop('checked', false);
 
       this.switch = true;
 
@@ -97,10 +99,7 @@ function make_slides(f) {
       this.n_sliders = 2;
 
       this.init_sliders(this.n_sliders);
-      // exp.sliderPost = [];
-      exp.sliderPost = utils.fillArray(-1,this.n_sliders);//[];
-      $("#prior_number").html("---");
-      $("#listener_number").html("---");
+      exp.sliderPost = utils.fillArray(-1,this.n_sliders);
 
     },
 
@@ -120,6 +119,8 @@ function make_slides(f) {
     },
 
     button : function() {
+      var speakerResponse = $('input[name="speaker"]:checked').val();
+
       if (exp.sliderPost.indexOf(-1)>-1) {
         $(".err").show();
       } else if (this.switch) {
@@ -136,15 +137,19 @@ function make_slides(f) {
         $(".question2").html(tasks[exp.condition]["query"]);
         $(".task_prompt").show();
         $(".question2").show();
+
         if (exp.condition == "speaker"){
           $("#speaker_choices").show();
         } else if (exp.condition == "listener"){
+          $("#listener_number").html("---");
           $("#listener_number").show();
           $("#slider_table2").show();
         }
 
         this.switch = false;
 
+      } else if (!(exp.sliderPost[2]) && (!speakerResponse)) {
+        $(".err").show();
       } else {
         this.rt = Date.now() - this.startTime;
         this.log_responses();
@@ -153,12 +158,18 @@ function make_slides(f) {
     },
 
     log_responses : function() {
+      var binaryDictionary = {Yes:1,No:0};
+      var response = exp.condition == "listener" ? exp.sliderPost[2] :
+        binaryDictionary[$('input[name="speaker"]:checked').val()];
+
       exp.data_trials.push({
-        "trial_type" : "twostep_elicitation",
+        "trial_type" : "prior_and_posterior",
+        "condition": exp.condition,
         "trial_num": this.trialNum,
-        "response0" : exp.sliderPost[0],
-        "response1" : exp.sliderPost[1],
+        "prior_probabilityOfPresent" : exp.sliderPost[0],
+        "prior_prevalenceGivenPresent" : exp.sliderPost[1],
         "rt":this.rt,
+        "posterior":response,
         "stim_type": this.stim.type,
         "stim_property": this.stim.property,
         "stim_category": this.stim.category
