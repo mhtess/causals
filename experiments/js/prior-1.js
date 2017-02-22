@@ -1,6 +1,18 @@
 // so called elicitation task...
 // same as experiment-11, 6 kinds / page
 
+var replaceTerms = function(stim, label){
+  var prompt = stim[label];
+  return prompt.replace(/CATEGORY/g,
+     stim.category).replace(/EXEMPLAR/g,
+       stim.exemplar).replace(/TREATMENT/g,
+         stim.treatment).replace(/TARGET/g,
+           stim.target).replace(/QUERY/g,
+             stim.query).replace(/UNIT/g,
+               stim.unit).replace(/PAST/g,
+                 stim.past)
+};
+
 function make_slides(f) {
   var slides = {};
 
@@ -49,6 +61,7 @@ function make_slides(f) {
     present : exp.stims,
     //this gets run only at the beginning of the block
     present_handle : function(stim) {
+
       // show prior questions and responses
       $(".question0").show();
       $("#slider_table0").show();
@@ -66,34 +79,33 @@ function make_slides(f) {
       $("#speaker_choices").hide();
       $('input[name="speaker"]').prop('checked', false);
 
-      this.switch = true;
-
-      this.startTime = Date.now();
       $(".err").hide();
 
-      stim.planet = "X138"
-      stim.story = stories[0]
-      var story =  stim.story.storyline
-      var newStory = story.replace(/CATEGORY/g, stim.category)
-
-      $(".data").html(newStory);
-
-      var data = [0, 10, 0, 0, 0, 15, 0, 0, 0, 0];
-
-      for (var i=0; i<=data.length; i++){
-        $("#d" + i).css({"padding":"15px"});
-        $("#d" + i).css({"border":"1px solid black"});
-        $("#d" + i).html(data[i]);
-      };
-
+      // which half of trial we're in
+      this.switch = true;
       this.stim = stim;
       this.trialNum = exp.stimscopy.indexOf(stim);
 
-      var existential_question = stim.story.existentialQuestion.replace("EXEMPLAR",stim.exemplar)
+      this.startTime = Date.now();
+
+      // stim.planet = "X138"
+
+      // replace CATEGORY, EXEMPLAR, TREATMENT, PAST from stimuli
+      var story = replaceTerms(stim, "storyline")
+
+      var existential_question = replaceTerms(stim, "existentialQuestion")
+
+      var prevalence_question = replaceTerms(stim, "prevalenceQuestion")
+
+      $(".data").html("You are now on planet " + stim.planet + ". " + story);
+
+      for (var i=0; i<=stim.data.length; i++){
+        $("#d" + i).css({"padding":"15px"});
+        $("#d" + i).css({"border":"1px solid black"});
+        $("#d" + i).html(stim.data[i]);
+      };
+
       $(".question0").html(existential_question);
-
-      var prevalence_question = stim.story.prevalenceQuestion.replace("EXEMPLAR",stim.exemplar);
-
       $(".question1").html(prevalence_question);
 
       this.n_sliders = 2;
@@ -134,19 +146,22 @@ function make_slides(f) {
 
         // show speaker/listener questions and responses
 
-        $(".question2").html(tasks[exp.condition]["query"]);
+        $(".question2").html(replaceTerms(this.stim, "prompt"));
         $(".task_prompt").show();
         $(".question2").show();
-        prompt = tasks[exp.condition]["prompt"]
+        prompt = replaceTerms(this.stim, "prompt");
         if (exp.condition == "speaker"){
-          prompt +=  "<br> The number of plants that were successfully grown (out of 100) with the 11th compound were:" + tasks.speaker.frequencies
+          prompt +=  "<br>" +
+          replaceTerms(this.stim, "frequencyStatement") + " <strong>" +
+          this.stim.frequency + "</strong>"
 
-          utt = 'Your colleague asks you: "' + tasks.speaker.query + '"';
+          utt = 'Your colleague asks you: <strong>"' + replaceTerms(this.stim, "question")+ '"</strong>';
+
           $("#speaker_choices").show();
         } else if (exp.condition == "listener"){
-          prompt = tasks[exp.condition]["prompt"];
-          utt = 'Your colleague tells you: "' + tasks.speaker.utterance + '"<br>' +
-          tasks.listener.query;
+          prompt = replaceTerms(this.stim, "prompt");
+          utt = 'Your colleague tells you: <strong>"' + replaceTerms(this.stim, "utterance") + '"</strong><br>' + replaceTerms(this.stim, "question");
+
           $("#listener_number").html("---");
           $("#listener_number").show();
           $("#slider_table2").show();
@@ -177,10 +192,7 @@ function make_slides(f) {
         "prior_probabilityOfPresent" : exp.sliderPost[0],
         "prior_prevalenceGivenPresent" : exp.sliderPost[1],
         "rt":this.rt,
-        "posterior":response,
-        "stim_type": this.stim.type,
-        "stim_property": this.stim.property,
-        "stim_category": this.stim.category
+        "posterior":response
       });
     }
   });
@@ -466,28 +478,62 @@ function init() {
   exp.condition = _.sample(["speaker","listener"])
 
   exp.nTrials = 30;
-  exp.propTypes = ["part","accidental","disease","color","vague"]
 
-var stimArray = _.shuffle(_.flatten(_.map(exp.propTypes,
-  function(type){
-    return _.map(_.shuffle(stimsForPrior3).slice(0,exp.nTrials/5),
-      function(stim){
-        var prefix = type=="part" ? "" : stim[type]+" "
-        return {property: prefix+stim.part,
-                type: type}
-    })
-  })))
+  exp.stims = [];
+  var shuffledDists = _.shuffle(distributions);
+  var frequencies = _.shuffle(tasks.speaker.frequencies);
+  var labels = _.shuffle(creatureNames);
+  var planets = _.shuffle(["X137","A325","Z142","Q681"])
 
-var creatures = _.map(_.shuffle(creatureNames).slice(0,exp.nTrials),
-  function(x){return {category: x.category, exemplar: x.exemplar}}
-  )
+  for (var i=0; i<stories.length; i++) {
+    var f;
+    if (exp.condition == "speaker"){
+      f = {
+        frequency: frequencies[i],
+        category: labels[i].category,
+        exemplar: labels[i].exemplar,
+        prompt: tasks.speaker.prompt,
+        utterance: tasks.speaker.utterance,
+        question: tasks.speaker.question,
+        frequencyStatement: tasks.speaker.frequencyStatement,
+        planet: planets[i]
+      };
+      } else {
+      f = {
+        category: labels[i].category,
+        exemplar: labels[i].exemplar,
+        prompt: tasks.listener.prompt,
+        utterance: tasks.listener.utterance,
+        question: tasks.listener.question,
+        planet: planets[i]
+      }
+    }
+    exp.stims.push(
+      _.extend(stories[i], shuffledDists[i], f)
+    )
+  };
 
-exp.stims =_.map(_.zip(creatures, stimArray),
-  function(cp){
-    return _.extend(cp[1], cp[0])
-  })
+  exp.stims = _.shuffle(exp.stims);
+  // var stimArray = _.shuffle(_.flatten(_.map(exp.propTypes,
+  //   function(type){
+  //     return _.map(_.shuffle(stimsForPrior3).slice(0,exp.nTrials/5),
+  //       function(stim){
+  //         var prefix = type=="part" ? "" : stim[type]+" "
+  //         return {property: prefix+stim.part,
+  //                 type: type}
+  //     })
+  //   })))
+  //
+  // var creatures = _.map(_.shuffle(creatureNames).slice(0,exp.nTrials),
+  //   function(x){return {category: x.category, exemplar: x.exemplar}}
+  //   )
+  //
+  // exp.stims =_.map(_.zip(creatures, stimArray),
+  //   function(cp){
+  //     return _.extend(cp[1], cp[0])
+  //   })
 
-exp.stimscopy = exp.stims.slice(0);
+  exp.stimscopy = exp.stims.slice(0);
 
   exp.system = {
       Browser : BrowserDetect.browser,
