@@ -41,13 +41,15 @@ function make_slides(f) {
     present : exp.stims,
     //this gets run only at the beginning of the block
     present_handle : function(stim) {
-      console.log(stim)
+
       // show prior questions and responses
       $(".question0").show();
       $("#slider_table0").show();
       $(".question1").show();
       $("#slider_table1").show();
       $("#prior_number").show();
+
+      $(".data").show();
 
       // hide listener/speaker question
       $(".question2").hide();
@@ -68,8 +70,6 @@ function make_slides(f) {
 
       this.startTime = Date.now();
 
-      // stim.planet = "X138"
-
       // replace CATEGORY, EXEMPLAR, TREATMENT, PAST from stimuli
       var story = replaceTerms(stim, "storyline")
 
@@ -77,7 +77,14 @@ function make_slides(f) {
 
       var prevalence_question = replaceTerms(stim, "prevalenceQuestion")
 
-      $(".data").html("You are on planet " + stim.planet + ". " + story);
+
+      $(".data").html("You are on planet " + stim.planet +
+      ". " + story + " " +
+      replaceTerms(_.extend(stim, {preamble}), "preamble"));
+
+      this.missing = _.sample([1,2,3,4,5,6,7,8,9])
+
+      stim.data.splice(this.missing, 0, "?");
 
       for (var i=0; i<=stim.data.length; i++){
         $("#d" + i).css({"padding":"15px"});
@@ -85,7 +92,7 @@ function make_slides(f) {
         $("#d" + i).html(stim.data[i]);
       };
 
-      $(".question0").html(existential_question);
+      $(".question0").html("One of the experiments has not yet finished.<br>"+existential_question);
       $(".question1").html(prevalence_question);
 
       this.n_sliders = 2;
@@ -125,6 +132,10 @@ function make_slides(f) {
         $("#slider_table1").hide();
         $("#prior_number").hide();
 
+
+        $(".data").html("<br><br><br><br>" +
+         replaceTerms(_.extend(this.stim, {preamble}), "preamble")
+       );
         // show speaker/listener questions and responses
 
         $(".question2").html(replaceTerms(this.stim, "prompt"));
@@ -182,7 +193,8 @@ function make_slides(f) {
         "unit":this.stim.unit,
         "target":this.stim.target,
         "planet": this.stim.planet,
-        "query": this.stim.query
+        "query": this.stim.query,
+        "missing":this.missing
       });
     }
   });

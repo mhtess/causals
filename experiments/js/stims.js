@@ -1,14 +1,18 @@
+// all of the causes are desirable... what if they are undesirable? (e.g., chemicals killing babies)
+
+var preamble = "The number of UNIT that were successfully PAST (out of 100) are:"
+
 var tasks = {
   speaker: {
-    frequencies: [10, 30, 50, 70, 90],
-    prompt: "The experiment with the 11th TREATMENT has finished.",
-    utterance: "The 11th TREATMENT TARGET.",
-    question: "Does the 11th TREATMENT QUERY?",
-    frequencyStatement: "The number of CATEGORY that were successfully PAST (out of 100) with the 11th TREATMENT were:"
+    frequencies: [10, 30, 50, 70],//, 90],
+    prompt: "The final experiment has finished.",
+    utterance: "It TARGET.",
+    question: "Does it QUERY?",
+    frequencyStatement: "The number of CATEGORY that were successfully PAST (out of 100) with the final TREATMENT were:"
   },
   listener: {
-    prompt: "The experiment with the 11th TREATMENT has finished.",
-    utterance: "The 11th TREATMENT TARGET.",
+    prompt: "The final experiment has finished.",
+    utterance: "It TARGET.",
     question: "How many out of 100 UNIT do you think were successfully PAST?"
   }
 }
@@ -44,9 +48,9 @@ var distributions = [
 var stories = [
   {
     story: "plants",
-    storyline:  "On this planet, there is an edible plant called CATEGORY and your team has to figure out how CATEGORY grow. Your team runs 11 experiments, trying to grow CATEGORY with 11 different chemical compounds. In each experiment, your team fed 100 CATEGORY with 1 of the compounds and recorded how many grew. The number of plants that were successfully grown (out of 100) in the first 10 experiments are shown below.",
-    existentialQuestion: "The experiment with the 11th compound is finishing.<br> How likely do you think it is that this chemical will grow <emph>at least 1</emph> EXEMPLAR?",
-    prevalenceQuestion: "We know now that at least 1 EXEMPLAR was successfully grown with the 11th compound.<br> How many of the remaining 99 do you think will successfully grow?\n",
+    storyline:  "On this planet, there is an edible plant called CATEGORY and your team has to figure out how CATEGORY grow. Your team runs 11 experiments, trying to grow CATEGORY with 11 different chemical compounds. In each experiment, your team fed 100 of the plants with 1 of the compounds and recorded how many grew.",
+    existentialQuestion: "How likely do you think it is that the chemical used in this experiment will grow <emph>at least 1</emph> EXEMPLAR?",
+    prevalenceQuestion: "We know now that at least 1 EXEMPLAR plant was successfully grown with this compound.<br> How many of the remaining 99 do you think will successfully grow?\n",
     treatment: "compound",
     target: "makes the plants grow",
     query: "make the plants grow",
@@ -55,20 +59,20 @@ var stories = [
   },
   {
     story: "bread",
-    storyline:  "On this inhabiated planet, the local intelligent species makes a kind of bread called EXEMPLAR and your team has to figure out how EXEMPLAR bread rises. Your team runs 11 experiments, trying to rise EXEMPLAR bread with 11 different yeasts. In each experiment, your team fed 100 balls of EXEMPLAR dough with 1 of the yeasts and recorded how many rose. The number of breads that successfully rose (out of 100) in the first 10 experiments are shown below.",
-    existentialQuestion: "The experiment with the 11th yeast is finishing.<br> How likely do you think it is that this yeast will make <emph>at least 1</emph> EXEMPLAR bread rise?",
-    prevalenceQuestion: "We know now that at least 1 EXEMPLAR bread rose successfully with the 11th yeast.<br> How many of the remaining 99 do you think will successfully rise?\n",
+    storyline:  "On this inhabited planet, the local intelligent species makes a kind of bread called EXEMPLAR and your team has to figure out how EXEMPLAR bread rises. Your team runs 11 experiments, trying to rise EXEMPLAR bread with 11 different yeasts. In each experiment, your team fed 100 balls of EXEMPLAR dough with 1 of the yeasts and recorded how many rose.",
+    existentialQuestion: "How likely do you think it is that the yeast used in this experiment will make <emph>at least 1</emph> EXEMPLAR bread rise?",
+    prevalenceQuestion: "We know now that at least 1 EXEMPLAR bread rose successfully with this yeast.<br> How many of the remaining 99 do you think will successfully rise?\n",
     treatment: "yeast",
     target: "makes the bread rise",
     query: "make the bread rise",
     past: "made to rise",
-    unit: "yeasts"
+    unit: "breads"
   },
   {
     story: "germs",
-    storyline:  "On this planet, there is a dangerous bacteria called EXEMPLAR and your team has to figure out what kills EXEMPLAR bacteria. Your team runs 11 experiments, trying to kill EXEMPLAR bacteria with 11 different chemical compounds. In each experiment, your team fed 100 EXEMPLAR bacteria with 1 of the compounds and recorded how many died. The number of bacteria that were successfully killed (out of 100) in the first 10 experiments are shown below.",
-    existentialQuestion: "The experiment with the 11th compound is finishing.<br> How likely do you think it is that this chemical will kill <emph>at least 1</emph> EXEMPLAR bacteria?",
-    prevalenceQuestion: "We know now that at least 1 EXEMPLAR bacteria was successfully killed with the 11th compound.<br> How many of the remaining 99 do you think will successfully be killed?\n",
+    storyline:  "On this planet, there are dangerous bacteria called EXEMPLAR and your team has to figure out what kills EXEMPLAR bacteria. Your team runs 11 experiments, trying to kill EXEMPLAR bacteria with 11 different chemical compounds. In each experiment, your team fed 100 of the bacteria with 1 of the compounds and recorded how many died.",
+    existentialQuestion: "How likely do you think it is that the chemical used in this experiment will kill <emph>at least 1</emph> EXEMPLAR bacteria?",
+    prevalenceQuestion: "We know now that at least 1 EXEMPLAR bacteria was successfully killed with this compound.<br> How many of the remaining 99 do you think will successfully be killed?\n",
     treatment: "compound",
     target: "kills the bacteria",
     query: "kill the bacteria",
@@ -77,9 +81,9 @@ var stories = [
   },
   {
     story: "babies",
-    storyline:  "On this inhabiated planet, the local intelligent species called CATEGORY have babies that cry a lot and your team has to figure out what makes EXEMPLAR babies stop crying. Your team runs 11 experiments, trying to stop EXEMPLAR babies from crying with 11 different techniques. In each experiment, your team tries one of the techniques on 100 crying EXEMPLAR babies and recorded how many stopped crying. The number of babies that successfully stopped crying (out of 100) in the first 10 experiments are shown below.",
-    existentialQuestion: "The experiment with the 11th technique is finishing.<br> How likely do you think it is that this technique will make <emph>at least 1</emph> EXEMPLAR baby stop crying?",
-    prevalenceQuestion: "We know now that at least 1 EXEMPLAR baby successfully stopped crying with the 11th technique.<br> How many of the remaining 99 do you think will successfully stop crying?\n",
+    storyline:  "On this inhabited planet, the local intelligent species called CATEGORY have babies that cry a lot and your team has to figure out what makes EXEMPLAR babies stop crying. Your team runs 11 experiments, trying to stop EXEMPLAR babies from crying with 11 different techniques. In each experiment, your team tries one of the techniques on 100 of the crying babies and recorded how many stopped crying.",
+    existentialQuestion: "How likely do you think it is that the technique used in this experiment will make <emph>at least 1</emph> EXEMPLAR baby stop crying?",
+    prevalenceQuestion: "We know now that at least 1 EXEMPLAR baby successfully stopped crying with this technique.<br> How many of the remaining 99 do you think will successfully stop crying?\n",
     treatment: "technique",
     target: "makes the babies stop crying",
     query: "make the babies stop crying",

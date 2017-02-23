@@ -29,6 +29,13 @@
   margin-right:100px;
 }
 
+.data{
+	text-align: justify;
+  /*margin-left:100px;
+  margin-right:100px;*/
+}
+
+
 .vertical_slider {
 	width: 10px;
 	height: 300px;
