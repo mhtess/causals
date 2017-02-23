@@ -1,0 +1,12 @@
+---
+title: "Pilot analysis"
+output: html_notebook
+---
+
+
+
+```{r}
+d <- read.csv("mturk/pilot-causals-1/causals-1-trials.csv")
+
+```
+
