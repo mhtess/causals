@@ -3,10 +3,137 @@ title: "Pilot analysis"
 output: html_notebook
 ---
 
+```{r}
+library(dplyr)
+library(tidyr)
+library(langcog)
+library(ggplot2)
+library(ggthemes)
+library(forcats)
+theme_set(theme_few())
+data.path <- "~/Documents/research/causals/mturk/pilot-causals-1/round1/"
+
+readData <- function(filename){
+  return(read.csv(paste(data.path, filename, sep = "")))
+}
+```
+
+```{r}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+```
 
 
 ```{r}
-d <- read.csv("mturk/pilot-causals-1/causals-1-trials.csv")
-
+d.info <- readData("pilot-causals-1-subject_information.csv")
 ```
+
+
+```{r}
+d <- readData("pilot-causals-1-trials.csv")
+```
+
+## Time
+
+Total time spent on experiment
+
+```{r fig.width=5}
+d %>% 
+  group_by(workerid) %>% 
+  summarize(totalMin = sum(rt/1000/60)) %>%
+  ggplot(., aes(x = totalMin))+
+  geom_histogram()
+```
+
+
+```{r fig.width=5}
+d %>%
+  ggplot(., aes(x = rt / 1000, fill = trial_num == 0))+
+  geom_histogram(position = position_dodge())+
+  scale_fill_solarized()+
+  xlab("seconds")
+```
+
+## Prior questions
+
+```{r fig.width=5.0, fig.height = 6}
+d %>% 
+  select(story, target, distribution, starts_with("prior")) %>%
+  gather(key, val, starts_with("prior")) %>%
+  separate(key, into = c("key", "question")) %>%
+  mutate(question = fct_relevel(question, "probabilityOfPresent"),
+         distribution = fct_relevel(distribution, "rare", "accidental", "gendered", "female", "prevalent", "biological")) %>%
+  ggplot(., aes( x = val, fill = distribution))+
+  geom_histogram()+
+  facet_grid(distribution~question)+
+  theme(strip.text.y = element_text(angle = 0))+
+  scale_fill_solarized()+
+  guides(fill = F)
+```
+
+## Listener data
+
+```{r fig.width=8, fig.height = 3}
+d %>% 
+  filter(condition == "listener") %>%
+  select(story, target, distribution, posterior) %>%
+  mutate(distribution = fct_relevel(distribution, "rare", "accidental", "gendered", "female", "prevalent", "biological")) %>%
+  ggplot(., aes( x = posterior, fill = distribution))+
+  geom_histogram()+
+  facet_grid(.~distribution)+
+  #theme(strip.text.y = element_text(angle = 0))+
+  scale_fill_solarized()+
+  guides(fill = F)+
+  scale_x_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1))
+```
+
+
+
+### Compare listener and prior prevalenceWhenPresent
+
+```{r}
+d.listener.prior <- d %>% 
+  filter(condition == "listener") %>%
+  select(story, target, distribution, prior_prevalenceGivenPresent, posterior) %>%
+  gather(key, val, prior_prevalenceGivenPresent, posterior) %>%
+  mutate(distribution = fct_relevel(distribution, "rare", "accidental", "gendered", "female", "prevalent", "biological")) %>%
+  group_by(distribution, key) %>%
+  multi_boot_standard(column = "val")
+
+d.listener.prior %>%
+  select(-ci_lower, -ci_upper) %>%
+  spread(key, mean) %>%
+  ungroup() %>%
+  summarize(correlation = cor(prior_prevalenceGivenPresent, posterior))
+
+d.listener.prior %>%
+  select(-ci_lower, -ci_upper) %>%
+  spread(key, mean) %>%
+  ggplot(., aes( x = prior_prevalenceGivenPresent, y = posterior, color = distribution))+
+  geom_abline(intercept = 0, slope = 1, lty = 3)+
+  geom_point()+
+  xlim(0, 1)+
+  ylim(0, 1)+
+  coord_fixed()+
+  scale_color_solarized()
+```
+
+## Speaker data
+
+
+```{r fig.width = 8, fig.height = 3.5}
+d %>% 
+  filter(condition == "speaker") %>%
+  mutate(distribution = fct_relevel(distribution, "rare", "accidental", "gendered", "female", "prevalent", "biological")) %>%
+  group_by(distribution, target, frequency) %>% #also, by story
+  multi_boot_standard(column = "posterior") %>%
+  ggplot(., aes( x = frequency, y = mean, ymin = ci_lower, ymax = ci_upper, group = distribution, fill = distribution))+
+  geom_bar(stat='identity', position = position_dodge(), color = 'black')+
+  geom_errorbar()+
+  scale_fill_solarized()+
+  scale_x_continuous(breaks = c(10, 30, 50, 70))+
+  facet_grid(.~distribution)+
+  guides(fill = F)+
+  ylab("proportion agree with causal")
+```
+
 
