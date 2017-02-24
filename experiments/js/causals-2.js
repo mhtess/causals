@@ -46,13 +46,14 @@ function make_slides(f) {
     present : exp.stims,
     //this gets run only at the beginning of the block
     present_handle : function(stim) {
+      var prompt, utt;
 
       // show prior questions and responses
-      $(".question0").show();
-      $("#slider_table0").show();
-      $(".question1").show();
-      $("#slider_table1").show();
-      $("#prior_number").show();
+      $(".question0").hide();
+      $("#slider_table0").hide();
+      // $(".question1").show();
+      $("#slider_table1").hide();
+      $("#prior_number").hide();
 
       $(".data").show();
 
@@ -63,13 +64,13 @@ function make_slides(f) {
       $("#listener_number").hide();
       $("#slider_table2").hide();
       // hide speaker task responses
-      $("#speaker_choices").hide();
-      $('input[name="speaker"]').prop('checked', false);
+      // $("#speaker_choices").hide();
+      // $('input[name="speaker"]').prop('checked', false);
 
       $(".err").hide();
 
       // which half of trial we're in
-      this.switch = true;
+      // this.switch = true;
       this.trialNum = exp.stimscopy.indexOf(stim);
 
       this.startTime = Date.now();
@@ -102,86 +103,136 @@ function make_slides(f) {
 
       stim.targetTreatment = stim.treatment+ " " + this.experimentNames[this.missing]
 
-      // stim.existentialQuestion = stim.existentialQuestion
-      var existential_question = replaceTerms(stim, "existentialQuestion")
+      if (exp.condition == "prior"){
+        // this.init_sliders(0)
+        utils.make_slider("#single_slider0", this.make_slider_callback(0))
 
-      var prevalence_question = replaceTerms(stim, "prevalenceQuestion")
+        $(".question0").html("The experiment using "+ stim.targetTreatment + " is not finished yet.<br>When it finishes, how many of the attempted 100 "+stim.unit + " will be successfully " + stim.past + "?");
+        $(".question0").show();
+
+        $("#slider_table0").show();
+        $("#prior_number").html("---");
+        $("#prior_number").show();
+
+      } else if (exp.condition == "speaker") {
+        // this.init_sliders(1)
+        utils.make_slider("#single_slider1", this.make_slider_callback(1))
+
+        $(".question2").html(replaceTerms(stim, "prompt"));
+        $(".task_prompt").show();
+        $(".question2").show();
+
+        prompt = replaceTerms(stim, "prompt");
+        prompt +=  "<br>" + replaceTerms(stim, "frequencyStatement") + " <strong>" +
+        stim.frequency + "</strong>"
+
+        utt = 'Your colleague asks you: <strong>"' + replaceTerms(stim, "question")+ '"</strong>';
+
+        $("#slider_table1").show();
+        $(".task_prompt").html(prompt);
+        $(".question2").html(utt);
+
+      } else if (exp.condition == "listener") {
+        // debugger;
+        // this.init_sliders(2)
+        $(".question2").html(replaceTerms(stim, "prompt"));
+        $(".task_prompt").show();
+        $(".question2").show();
+
+        utils.make_slider("#single_slider2", this.make_slider_callback(2))
+
+        prompt = replaceTerms(stim, "prompt");
+        utt = 'Your colleague tells you: <strong>"' + jsUcfirst(replaceTerms(stim, "utterance")) + '"</strong><br>' + replaceTerms(stim, "question");
+
+        $("#listener_number").html("---");
+        $("#listener_number").show();
+        $("#slider_table2").show();
+        $(".task_prompt").html(prompt);
+        $(".question2").html(utt);
 
 
-      $(".question0").html("The experiment using "+ stim.targetTreatment + " is not finished yet.<br>"+existential_question);
 
-      $(".question1").html(prevalence_question);
+      }
 
-      this.n_sliders = 2;
 
-      this.init_sliders(this.n_sliders);
-      exp.sliderPost = utils.fillArray(-1,this.n_sliders);
-      $("#prior_number").html("---");
+      // var existential_question = replaceTerms(stim, "existentialQuestion")
+      //
+      // var prevalence_question = replaceTerms(stim, "prevalenceQuestion")
+      //
+      //
+      // $(".question0").html("The experiment using "+ stim.targetTreatment + " is not finished yet.<br>"+existential_question);
+      //
+      // $(".question1").html(prevalence_question);
+
+      // this.n_sliders = 3;
+
+      // this.init_sliders(this.n_slider);
+      exp.sliderPost = -1;//[-1];//utils.fillArray(-1,this.n_sliders);
       this.stim = stim;
     },
 
-    init_sliders : function(n_sliders) {
-      for (var i=0; i<n_sliders; i++) {
+    init_sliders : function(i) {
+      // for (var i=0; i<n_sliders; i++) {
         utils.make_slider("#single_slider" + i, this.make_slider_callback(i));
-      }
-      utils.make_slider("#single_slider2", this.make_slider_callback(2));
+      // }
+      // utils.make_slider("#single_slider2", this.make_slider_callback(2));
 
     },
     make_slider_callback : function(i) {
       return function(event, ui) {
-        exp.sliderPost[i] = (i == 1) ? ui.value == 1 ? 0.99 : ui.value : ui.value;
-        (i==1) ? $("#prior_number").html(Math.round(exp.sliderPost[i]*100)+"") :
-        (i==2) ? $("#listener_number").html(Math.round(exp.sliderPost[i]*100)+"") : null
+        exp.sliderPost = ui.value;
+        (i==0) ? $("#prior_number").html(Math.round(exp.sliderPost*100)+"") :
+        (i==2) ? $("#listener_number").html(Math.round(exp.sliderPost*100)+"") : null
       };
     },
 
     button : function() {
       var speakerResponse = $('input[name="speaker"]:checked').val();
       var prompt, utt;
-      if (exp.sliderPost.indexOf(-1)>-1) {
+      if (exp.sliderPost==-1) {
         $(".err").show();
-      } else if (this.switch) {
-        $(".err").hide();
-        // hide prior questions and responses
-        $(".question0").hide();
-        $("#slider_table0").hide();
-        $(".question1").hide();
-        $("#slider_table1").hide();
-        $("#prior_number").hide();
-
-        $(".data").html("<br><br><br><br>");
+      // } else if (this.switch) {
+      //   $(".err").hide();
+      //   // hide prior questions and responses
+      //   $(".question0").hide();
+      //   $("#slider_table0").hide();
+      //   $(".question1").hide();
+      //   $("#slider_table1").hide();
+      //   $("#prior_number").hide();
+      //
+      //   $(".data").html("<br><br><br><br>");
       //   $(".data").html("<br><br><br><br>" +
       //    replaceTerms(_.extend(this.stim, {preamble}), "preamble")
       //  );
         // show speaker/listener questions and responses
 
-        $(".question2").html(replaceTerms(this.stim, "prompt"));
-        $(".task_prompt").show();
-        $(".question2").show();
+        // $(".question2").html(replaceTerms(this.stim, "prompt"));
+        // $(".task_prompt").show();
+        // $(".question2").show();
+        //
+        // prompt = replaceTerms(this.stim, "prompt");
+        // if (exp.condition == "speaker"){
+        //   prompt +=  "<br>" + replaceTerms(this.stim, "frequencyStatement") + " <strong>" +
+        //   this.stim.frequency + "</strong>"
+        //
+        //   utt = 'Your colleague asks you: <strong>"' + replaceTerms(this.stim, "question")+ '"</strong>';
+        //
+        //   $("#speaker_choices").show();
+        // } else if (exp.condition == "listener"){
+        //   prompt = replaceTerms(this.stim, "prompt");
+        //   utt = 'Your colleague tells you: <strong>"' + jsUcfirst(replaceTerms(this.stim, "utterance")) + '"</strong><br>' + replaceTerms(this.stim, "question");
+        //
+        //   $("#listener_number").html("---");
+        //   $("#listener_number").show();
+        //   $("#slider_table2").show();
+        // }
+        //
+        // $(".task_prompt").html(prompt);
+        // $(".question2").html(utt);
+        // this.switch = false;
 
-        prompt = replaceTerms(this.stim, "prompt");
-        if (exp.condition == "speaker"){
-          prompt +=  "<br>" + replaceTerms(this.stim, "frequencyStatement") + " <strong>" +
-          this.stim.frequency + "</strong>"
-
-          utt = 'Your colleague asks you: <strong>"' + replaceTerms(this.stim, "question")+ '"</strong>';
-
-          $("#speaker_choices").show();
-        } else if (exp.condition == "listener"){
-          prompt = replaceTerms(this.stim, "prompt");
-          utt = 'Your colleague tells you: <strong>"' + jsUcfirst(replaceTerms(this.stim, "utterance")) + '"</strong><br>' + replaceTerms(this.stim, "question");
-
-          $("#listener_number").html("---");
-          $("#listener_number").show();
-          $("#slider_table2").show();
-        }
-
-        $(".task_prompt").html(prompt);
-        $(".question2").html(utt);
-        this.switch = false;
-
-      } else if (!(exp.sliderPost[2]) && (!speakerResponse)) {
-        $(".err").show();
+      // } else if (!(exp.sliderPost[2]) && (!speakerResponse)) {
+      //   $(".err").show();
       } else {
         this.rt = Date.now() - this.startTime;
         this.log_responses();
@@ -190,18 +241,19 @@ function make_slides(f) {
     },
 
     log_responses : function() {
-      var binaryDictionary = {Yes:1,No:0};
-      var response = exp.condition == "listener" ? exp.sliderPost[2] :
-        binaryDictionary[$('input[name="speaker"]:checked').val()];
+      // var binaryDictionary = {Yes:1,No:0};
+      // var response = exp.condition == "listener" ? exp.sliderPost[2] :
+      //   binaryDictionary[$('input[name="speaker"]:checked').val()];
 
       exp.data_trials.push({
         "trial_type" : "prior_and_posterior",
         "condition": exp.condition,
         "trial_num": this.trialNum,
-        "prior_probabilityOfPresent" : exp.sliderPost[0],
-        "prior_prevalenceGivenPresent" : exp.sliderPost[1],
+        // "prior_probabilityOfPresent" : exp.sliderPost[0],
+        // "prior_prevalenceGivenPresent" : exp.sliderPost[1],
+        "response" : exp.sliderPost,
+        // "prior_prevalenceGivenPresent" : exp.sliderPost[1],
         "rt":this.rt,
-        "posterior":response,
         "frequency": this.stim.frequency,
         "category": this.stim.category,
         "story": this.stim.story,
@@ -269,7 +321,7 @@ function init() {
   exp.trials = [];
   exp.catch_trials = [];
 
-  exp.condition = _.sample(["speaker","listener"])
+  exp.condition = _.sample(["prior","speaker","listener"])
 
   exp.nTrials = stories.length;
 
@@ -321,9 +373,9 @@ function init() {
 
   //blocks of the experiment:
    exp.structure=[
-     "prior_elicitation",
      "i0",
      "instructions",
+     "prior_elicitation",
      "subj_info",
      "thanks"
    ];
