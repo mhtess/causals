@@ -1,6 +1,6 @@
 // all of the causes are desirable... what if they are undesirable? (e.g., chemicals killing babies)
 
-var preamble = "The results (number of UNIT PAST) are shown below:"
+var preamble = "The results are shown below:"
 
 var tasks = {
   speaker: {

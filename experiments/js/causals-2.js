@@ -96,7 +96,8 @@ function make_slides(f) {
         $("#d" + i + "a").html("100")
         $("#d" + i + "a").css({"border":"1px dotted black"});
       };
-      $("#d-1").css({"border":"1px solid black", "font-weight":"bold"});
+      $("#d-1").css({"border":"1px solid black","font-size":"14px", "font-weight":"bold", "width":"20%"});
+      $("#d-1").html(stim.unit + " " + stim.past);
       $("#d-1a").css({"border":"1px dotted black"});
 
       stim.targetTreatment = stim.treatment+ " " + this.experimentNames[this.missing]
@@ -148,10 +149,10 @@ function make_slides(f) {
         $("#slider_table1").hide();
         $("#prior_number").hide();
 
-
-        $(".data").html("<br><br><br><br>" +
-         replaceTerms(_.extend(this.stim, {preamble}), "preamble")
-       );
+        $(".data").html("<br><br><br><br>");
+      //   $(".data").html("<br><br><br><br>" +
+      //    replaceTerms(_.extend(this.stim, {preamble}), "preamble")
+      //  );
         // show speaker/listener questions and responses
 
         $(".question2").html(replaceTerms(this.stim, "prompt"));
@@ -320,11 +321,11 @@ function init() {
 
   //blocks of the experiment:
    exp.structure=[
+     "prior_elicitation",
      "i0",
      "instructions",
-     "prior_elicitation",
-     'subj_info',
-     'thanks'
+     "subj_info",
+     "thanks"
    ];
 
   exp.data_trials = [];
