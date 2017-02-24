@@ -3,6 +3,12 @@ title: "Pilot analysis"
 output: html_notebook
 ---
 
+
+```{r}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+```
+
+
 ```{r}
 library(dplyr)
 library(tidyr)
@@ -10,16 +16,13 @@ library(langcog)
 library(ggplot2)
 library(ggthemes)
 library(forcats)
+library(knitr)
 theme_set(theme_few())
-data.path <- "~/Documents/research/causals/mturk/pilot-causals-1/round1/"
+data.path <- "~/Documents/research/causals/data/pilots/"
 
 readData <- function(filename){
   return(read.csv(paste(data.path, filename, sep = "")))
 }
-```
-
-```{r}
-knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
 ```
 
 
@@ -44,13 +47,15 @@ d %>%
   geom_histogram()
 ```
 
+Time on each trial (first trial in red)
 
 ```{r fig.width=5}
 d %>%
   ggplot(., aes(x = rt / 1000, fill = trial_num == 0))+
   geom_histogram(position = position_dodge())+
   scale_fill_solarized()+
-  xlab("seconds")
+  xlab("seconds")+
+  xlim(0, 200)
 ```
 
 ## Prior questions
@@ -105,11 +110,24 @@ d.listener.prior %>%
   ungroup() %>%
   summarize(correlation = cor(prior_prevalenceGivenPresent, posterior))
 
-d.listener.prior %>%
-  select(-ci_lower, -ci_upper) %>%
-  spread(key, mean) %>%
-  ggplot(., aes( x = prior_prevalenceGivenPresent, y = posterior, color = distribution))+
+left_join(
+  d.listener.prior %>%
+    filter(key == "posterior") %>%
+    rename(listener = mean, 
+           listener_upper = ci_upper, listener_lower = ci_lower) %>%
+    select(-key),
+  d.listener.prior %>%
+    filter(key == "prior_prevalenceGivenPresent") %>%
+    rename(prior = mean, 
+           prior_upper = ci_upper, prior_lower = ci_lower) %>%
+    select(-key)
+  ) %>%
+  ggplot(., aes( x = prior, xmin = prior_lower, xmax =prior_upper,
+                 y = listener, ymin = listener_lower, ymax = listener_upper,
+                 color = distribution))+
   geom_abline(intercept = 0, slope = 1, lty = 3)+
+  geom_linerange()+
+  geom_errorbarh(width = 0.1)+
   geom_point()+
   xlim(0, 1)+
   ylim(0, 1)+
@@ -120,11 +138,38 @@ d.listener.prior %>%
 ## Speaker data
 
 
+```{r}
+d %>% 
+  filter(condition == "speaker", frequency %in% c(10)) %>%
+  mutate(distribution = fct_relevel(distribution, "rare", "accidental", "gendered", "female", "prevalent", "biological")) %>%
+  group_by(distribution, frequency) %>%
+  summarize(n = n()) %>%
+  kable()
+```
+
+
+```{r}
+d %>% 
+  filter(condition == "speaker", frequency %in% c(30)) %>%
+  mutate(distribution = fct_relevel(distribution, "rare", "accidental", "gendered", "female", "prevalent", "biological")) %>%
+  group_by(distribution, frequency) %>%
+  summarize(n = n()) %>%
+  kable()
+```
+```{r}
+d %>% 
+  filter(condition == "speaker", frequency %in% c(50)) %>%
+  mutate(distribution = fct_relevel(distribution, "rare", "accidental", "gendered", "female", "prevalent", "biological")) %>%
+  group_by(distribution, frequency) %>%
+  summarize(n = n()) %>%
+  kable()
+```
+
 ```{r fig.width = 8, fig.height = 3.5}
 d %>% 
   filter(condition == "speaker") %>%
   mutate(distribution = fct_relevel(distribution, "rare", "accidental", "gendered", "female", "prevalent", "biological")) %>%
-  group_by(distribution, target, frequency) %>% #also, by story
+  group_by(distribution, frequency) %>% #also, by story / target
   multi_boot_standard(column = "posterior") %>%
   ggplot(., aes( x = frequency, y = mean, ymin = ci_lower, ymax = ci_upper, group = distribution, fill = distribution))+
   geom_bar(stat='identity', position = position_dodge(), color = 'black')+
