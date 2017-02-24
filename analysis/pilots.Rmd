@@ -25,6 +25,7 @@ readData <- function(filename){
 }
 ```
 
+# Pilot 1
 
 ```{r}
 d.info <- readData("pilot-causals-1-subject_information.csv")
@@ -180,5 +181,95 @@ d %>%
   guides(fill = F)+
   ylab("proportion agree with causal")
 ```
+# Pilot 2
+
+```{r}
+d.info <- readData("pilot-causals-2-subject_information.csv")
+```
 
 
+```{r}
+d <- readData("pilot-causals-2-trials.csv")
+```
+
+## Time
+
+Total time spent on experiment
+
+```{r fig.width=5}
+d %>% 
+  group_by(workerid) %>% 
+  summarize(totalMin = sum(rt/1000/60)) %>%
+  ggplot(., aes(x = totalMin))+
+  geom_histogram()
+```
+
+Time on each trial (first trial in red)
+
+```{r fig.width=5}
+d %>%
+  ggplot(., aes(x = rt / 1000, fill = trial_num == 0))+
+  geom_histogram(position = position_dodge())+
+  scale_fill_solarized()+
+  xlab("seconds")+
+  xlim(0, 200)
+```
+## Prior and listener data
+
+```{r fig.width=8, fig.height = 3}
+df.trials %>%
+  filter(condition %in% c("prior", "listener")) %>%
+  ggplot(., aes(x = response, fill = condition))+
+  #geom_density()+
+  geom_histogram(position = position_dodge())+
+  facet_grid(.~distribution)+
+  scale_fill_grey()+
+  scale_x_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1))+
+  xlab("causal power / frequency")
+```
+
+```{r}
+df.listener.summary <- df.trials %>%
+  filter(condition %in% c("prior", "listener")) %>%
+  mutate(distribution = fct_relevel(distribution, "rare", "accidental", "gendered", "female", "prevalent", "biological")) %>%
+  group_by(condition, distribution) %>%
+  multi_boot_standard(column = "response")
+  
+ggplot(df.listener.summary, aes(x = distribution, y = mean, ymin = ci_lower, ymax = ci_upper, fill = condition)) + 
+  geom_bar(stat = 'identity', position = position_dodge(), color = 'black')+
+  geom_errorbar(position = position_dodge())+
+  scale_fill_grey()+
+  coord_flip()+
+  ylab("mean causal power / frequency")
+```
+
+## Speaker data
+
+```{r fig.width=8, fig.height = 3}
+df.trials %>%
+  filter(condition == "speaker") %>%
+  mutate(frequency = factor(frequency),
+         distribution = fct_relevel(distribution, "rare", "accidental", "gendered", "female", "prevalent", "biological")) %>%
+  ggplot(., aes(x = response, fill = frequency))+
+  #geom_density()+
+  geom_histogram(position = position_dodge(), bins = 10)+
+  facet_grid(distribution~frequency)+
+  scale_fill_solarized()+
+  scale_x_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1))+
+  theme(strip.text.y = element_text(angle = 0))+
+  xlab("agreement with causal")
+```
+
+```{r}
+df.speaker.summary <- df.trials %>%
+  filter(condition == "speaker") %>%
+  mutate(distribution = fct_relevel(distribution, "rare", "accidental", "gendered", "female", "prevalent", "biological")) %>%
+  group_by(condition, distribution, frequency) %>%
+  multi_boot_standard(column = "response")
+  
+ggplot(df.speaker.summary, aes(x = frequency, y = mean, ymin = ci_lower, ymax = ci_upper, fill = distribution)) + 
+  geom_bar(stat = 'identity', position = position_dodge(), color = 'black')+
+  geom_errorbar(position = position_dodge())+
+  scale_fill_solarized()+
+  ylab("mean agreement with causal")
+```
