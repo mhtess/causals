@@ -321,7 +321,7 @@ function init() {
   exp.trials = [];
   exp.catch_trials = [];
 
-  exp.condition = _.sample(["prior","speaker","listener"])
+  exp.condition = _.sample(["prior","speaker","speaker","speaker","speaker","listener"])
 
   exp.nTrials = stories.length;
 
