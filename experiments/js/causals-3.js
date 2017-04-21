@@ -104,6 +104,7 @@ function make_slides(f) {
       $("#d-1a").hide()
       $("#d-1").css({"border":"1px solid black","font-size":"14px", "font-weight":"bold", "width":"20%"});
       $("#d-1").html(stim.unit + " " + stim.past);
+      $("#d-1a").html(stim.unit + " treated")
       $("#d-1a").css({"border":"1px dotted black"});
 
       stim.targetTreatment = stim.treatment+ " " + this.experimentNames[this.missing]
@@ -114,6 +115,8 @@ function make_slides(f) {
     },
 
     nextExperiment: function() {
+
+      var isAnother = (this.count == 0) ? "" : "another "
       $("#d-1").show()
       $("#d-1a").show()
       i =this.count;
@@ -130,9 +133,9 @@ function make_slides(f) {
 
       $("#evidenceDescription").show();
       if (this.stim.data[i] == "?") {
-        $("#evidenceDescription").html("We treated 100 " + this.stim.category + " with " + this.stim.treatment + " " + this.experimentNames[i] + ". <br>The experiment is still underway and <strong>the results are not yet known.</strong>");
+        $("#evidenceDescription").html("Your team treated "+isAnother+"100 " + this.stim.category + " with " + this.stim.treatment + " " + this.experimentNames[i] + ". <br>The results of experiment have been misplaced so <strong>we don't know</strong> how many " + this.stim.unit + this.stim.evidence +".");
       } else {
-        $("#evidenceDescription").html("We treated 100 " + this.stim.category + " with " + this.stim.treatment + " " + this.experimentNames[i] + ". <br>As a result, <strong>" + this.stim.data[i] + "</strong> " + this.stim.category +  this.stim.evidence +".");
+        $("#evidenceDescription").html("Your team treated "+isAnother+"100 " + this.stim.category + " with " + this.stim.treatment + " " + this.experimentNames[i] + ". <br>As a result, <strong>" + this.stim.data[i] + "</strong> " + this.stim.category +  this.stim.evidence +".");
       }
 
 
@@ -299,7 +302,7 @@ function init() {
 
   repeatWorker = false;
   (function(){
-      var ut_id = "mht-causals-20170222";
+      var ut_id = "mht-causals-20170421";
       if (UTWorkerLimitReached(ut_id)) {
         $('.slide').empty();
         repeatWorker = true;
