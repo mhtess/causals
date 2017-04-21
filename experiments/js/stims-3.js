@@ -5,7 +5,7 @@ var preamble = "The results are shown below:"
 var tasks = {
   speaker: {
     frequencies: [20],//, 90],
-    prompt: "The experiment with SPECIAL has just finished.",
+    prompt: "The results of the experiment with SPECIAL were found.",
     utterance: "SPECIAL TARGET.",
     question: "Does SPECIAL QUERY?",
     frequencyStatement: "The number of CATEGORY that were successfully PAST (out of 100) with SPECIAL was:"

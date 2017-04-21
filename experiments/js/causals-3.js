@@ -91,7 +91,7 @@ function make_slides(f) {
 
 
       this.missing = _.sample([1,2,3,4,5,6,7,8,9]);
-      this.experimentNames = ["A","B","C","D","E","F","G","H","I","J","K"];
+      this.experimentNames = ["A","B","C","D","E","F","G","H","J","K","L"];
 
       stim.data.splice(this.missing, 0, "?");
 
