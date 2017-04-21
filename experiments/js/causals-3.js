@@ -82,23 +82,26 @@ function make_slides(f) {
       // replace CATEGORY, EXEMPLAR, TREATMENT, PAST from stimuli
       var story = replaceTerms(stim, "storyline")
 
-      $(".data").html("You are on planet " + stim.planet +
-      ". " + story + " " +
+      // $(".data").html("You are on planet " + stim.planet +
+      // ". " + story + " " +
+      // replaceTerms(_.extend(stim, {preamble}), "preamble"));
+
+      $(".data").html(story + " " +
       replaceTerms(_.extend(stim, {preamble}), "preamble"));
+
 
       this.missing = _.sample([1,2,3,4,5,6,7,8,9]);
       this.experimentNames = ["A","B","C","D","E","F","G","H","I","J","K"];
 
       stim.data.splice(this.missing, 0, "?");
 
-      // for (var i=0; i<=stim.data.length; i++){
-      //   $("#h" + i).html(stim.treatment + " " + this.experimentNames[i])
-      //   $("#h" + i).css({"font-size":"13px", "border":"1px dotted black"})
-      //   $("#d" + i).css({"padding":"10px", "font-weight":"bold", "border":"1px solid black"});
-      //   $("#d" + i).html(stim.data[i]);
-      //   $("#d" + i + "a").html("100")
-      //   $("#d" + i + "a").css({"border":"1px dotted black"});
-      // };
+      for (var i=0; i<=stim.data.length; i++){
+        $("#d" + i).hide()
+        $("#h" + i).hide()
+        $("#d" + i + "a").hide()
+      };
+      $("#d-1").hide()
+      $("#d-1a").hide()
       $("#d-1").css({"border":"1px solid black","font-size":"14px", "font-weight":"bold", "width":"20%"});
       $("#d-1").html(stim.unit + " " + stim.past);
       $("#d-1a").css({"border":"1px dotted black"});
@@ -111,7 +114,13 @@ function make_slides(f) {
     },
 
     nextExperiment: function() {
+      $("#d-1").show()
+      $("#d-1a").show()
       i =this.count;
+      $("#h" + i).show()
+      $("#d" + i + "a").show()
+      $("#d" + i).show()
+
       $("#h" + i).html(this.stim.treatment + " " + this.experimentNames[i])
       $("#h" + i).css({"font-size":"13px", "border":"1px dotted black"})
       $("#d" + i).css({"padding":"10px", "font-weight":"bold", "border":"1px solid black"});
@@ -158,7 +167,7 @@ function make_slides(f) {
           prompt = replaceTerms(this.stim, "prompt");
           prompt +=  "<br>" + replaceTerms(this.stim, "frequencyStatement") + " <strong>" +
           this.stim.frequency + "</strong>"
-          utt = 'Your colleague asks you: <strong>"' + replaceTerms(this.stim, "question")+ '"</strong>';
+          utt = 'Judge the following statement: <strong>"' + jsUcfirst(replaceTerms(this.stim, "utterance"))+ '"</strong>';
           // $("#slider_table1").show();
           $("#speaker_choices").show();
           $(".task_prompt").html(prompt);
@@ -309,7 +318,7 @@ function init() {
   var shuffledDists = _.shuffle(distributions);
   var frequencies = _.shuffle(tasks.speaker.frequencies);
   var labels = _.shuffle(creatureNames);
-  var planets = "X136"// _.shuffle(["X137","A325","Z142","Q681"])
+  var planets = _.shuffle(["X137","A325","Z142","Q681"])
 
   for (var i=0; i<stories.length; i++) {
     var f;
@@ -353,7 +362,7 @@ function init() {
 
   //blocks of the experiment:
    exp.structure=[
-    //  "i0",
+     "i0",
     //  "instructions",
      "prior_elicitation",
      "subj_info",

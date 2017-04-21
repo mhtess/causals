@@ -4,7 +4,7 @@ var preamble = "The results are shown below:"
 
 var tasks = {
   speaker: {
-    frequencies: [20, 40, 60, 80],//, 90],
+    frequencies: [20],//, 90],
     prompt: "The experiment with SPECIAL has just finished.",
     utterance: "SPECIAL TARGET.",
     question: "Does SPECIAL QUERY?",
@@ -23,18 +23,18 @@ var distributions = [
     distribution: "rare",
     data: [0, 10, 0, 0, 0, 15, 0, 0, 0, 0]
   },
-  {
-    distribution: "gendered",
-    data:[0, 0, 50, 0, 0, 50, 0, 0, 0, 0]
-  },
-  {
-    distribution: "female",
-    data: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50]
-  },
-  {
-    distribution: "biological",
-    data: [0, 0, 100, 100, 0, 0, 100, 0, 0, 100, 0]
-  },
+  // {
+  //   distribution: "gendered",
+  //   data:[0, 0, 50, 0, 0, 50, 0, 0, 0, 0]
+  // },
+  // {
+  //   distribution: "female",
+  //   data: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50]
+  // },
+  // {
+  //   distribution: "biological",
+  //   data: [0, 0, 100, 100, 0, 0, 100, 0, 0, 100, 0]
+  // },
   {
     distribution: "accidental",
     data: [5, 15, 10, 5, 10, 15, 5, 5, 10, 15, 15]
@@ -46,26 +46,46 @@ var distributions = [
 ]
 
 var stories = [
+  // {
+  //   story: "happy animals",
+  //   storyline:  "On this planet, there are animals called CATEGORY and your team wants to figure out what makes CATEGORY happy. Your team runs experiments trying to make CATEGORY happy with different chemical compounds.",
+  //   treatment: "compound",
+  //   target: "makes the animals happy",
+  //   query: "make the animals happy",
+  //   evidence: " were happy",
+  //   past: "happy",
+  //   unit: "animals"
+  // },
+  // {
+  //   story: "wagging tails",
+  //   storyline:  "On this planet, there are animals called CATEGORY and your team wants to figure out what makes CATEGORY wag their tails. Your team runs experiments trying to make CATEGORY' tails wag with different chemical compounds.",
+  //   treatment: "compound",
+  //   target: "makes the animals' tails wag",
+  //   query: "make the animals' tails wag",
+  //   past: "made to wag",
+  //   evidence: "' tails were made to wag",
+  //   unit: "tails"
+  // },
   {
-    story: "happy animals",
-    storyline:  "On this planet, there are animals called CATEGORY and your team wants to figure out what makes CATEGORY happy. Your team runs experiments trying to make CATEGORY happy with different chemical compounds.",
+    story: "alert",
+    storyline:  "You are an astronaut-scientist exploring a distant planet. On this planet, there are animals called CATEGORY and your team of scientists wants to figure out what makes CATEGORY more alert. Your team runs experiments trying to make CATEGORY alert with different chemical compounds.",
     treatment: "compound",
-    target: "makes the animals happy",
-    query: "make the animals happy",
-    evidence: " were happy",
-    past: "happy",
+    target: "makes the animals alert",
+    query: "make the animals alert",
+    past: "made alert",
+    evidence: " were made alert",
     unit: "animals"
-  },
-  {
-    story: "wagging tails",
-    storyline:  "On this planet, there are animals called CATEGORY and your team wants to figure out what makes CATEGORY wag their tails. Your team runs experiments trying to make CATEGORY' tails wag with different chemical compounds.",
-    treatment: "compound",
-    target: "makes the animals' tails wag",
-    query: "make the animals' tails wag",
-    past: "made to wag",
-    evidence: "' tails were made to wag",
-    unit: "tails"
-  }
+  }//,
+  // {
+  //   story: "dizzy",
+  //   storyline:  "On this planet, there are animals called CATEGORY and your team wants to figure out what makes CATEGORY dizzy. Your team runs experiments trying to make CATEGORY dizzy with different chemical compounds.",
+  //   treatment: "compound",
+  //   target: "makes the animals dizzy",
+  //   query: "make the animals dizzy",
+  //   past: "made dizzy",
+  //   evidence: " were made dizzy",
+  //   unit: "animals"
+  // }
   //,
   // {
   //   story: "plants",
@@ -102,7 +122,7 @@ var stories = [
   // },
   // {
   //   story: "germs",
-  //   storyline:  "On this planet, there are dangerous bacteria called EXEMPLAR and your team has to figure out what kills EXEMPLAR bacteria. Your team runs experiments trying to kill EXEMPLAR bacteria with different chemical compounds.",
+  //   storyline:  "On this planet, there are bacteria called EXEMPLAR and your team has to figure out what kills EXEMPLAR bacteria. Your team runs experiments trying to kill EXEMPLAR bacteria with different chemical compounds.",
   //   existentialQuestion: "How likely do you think it is that SPECIAL will kill <emph>at least 1</emph> EXEMPLAR bacteria?",
   //   prevalenceQuestion: "We know now that at least 1 EXEMPLAR bacteria was successfully killed with SPECIAL.<br> How many of the remaining 99 do you think will successfully be killed?\n",
   //   treatment: "compound",

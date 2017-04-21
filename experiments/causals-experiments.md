@@ -33,5 +33,15 @@ n = 63 ($30.24, including fees) [7 batches of 9]
 # Speaker experiments
 ===			
 
+Pilot.
+
+- 1 trial / participant.
+- 1 item.
+- 3 distributions: {rare, accidental, prevalent}
+- 2 AFC.
+- Estimated 30 participants / condition --> 90 participants.
+- $0.25 / participant x 90 = (0.25*90) + (0.25*90*0.2) = 27
+
+
 # Listener experiments
 ===
