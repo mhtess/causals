@@ -1,9 +1,6 @@
 # Causals experiments
 
-# Prior elicitations
-===			
-
-## Prior 1
+## Causals 1
 
 A pilot test of the 2-stage (prior + posterior) task.
 4 trials / participant
@@ -14,7 +11,7 @@ n = 9 ($0.50)
 
 + 63 ($37.80) [7 batches of 9]
 
-## Prior 2
+## Causals 2
 
 Similar to pilot 1.
 Removed a bunch of the prose, and beefed up the tabular representation of the data.
@@ -30,10 +27,9 @@ Dropping pay a little because there are substantially fewer questions.
 
 n = 63 ($30.24, including fees) [7 batches of 9]
 
-# Speaker experiments
-===			
+## Causals 3
 
-Pilot.
+Endorsement task only.
 
 - 1 trial / participant.
 - 1 item.
@@ -42,6 +38,15 @@ Pilot.
 - Estimated 30 participants / condition --> 90 participants.
 - $0.25 / participant x 90 = (0.25*90) + (0.25*90*0.2) = 27
 
+## Causals 4
 
-# Listener experiments
-===
+Endorsement task only.
+
+Same as causals 3, except the table disappears when the participant is presented with information about the final experiment and asked to judge the statement.
+
+- 1 trial / participant.
+- 1 item.
+- 3 distributions: {rare, accidental, prevalent}
+- 2 AFC.
+- Estimated 30 participants / condition --> 90 participants.
+- $0.25 / participant x 90 = (0.25*90) + (0.25*90*0.2) = 27
