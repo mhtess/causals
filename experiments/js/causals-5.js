@@ -118,7 +118,7 @@ function make_slides(f) {
 
 
 
-      exp.sliderPost = -1;//[-1];//utils.fillArray(-1,this.n_sliders);
+      exp.sliderPost =[];//utils.fillArray(-1,this.n_sliders);
       this.stim = stim;
 
 
@@ -184,13 +184,12 @@ function make_slides(f) {
 
             $(".slider_row").remove();
             for (var i=0; i<this.nextExperimentNames.length; i++) {
-              var j = i + 3;
               var sentence_type = this.nextExperimentNames[i];
               var sentence = this.stim.treatment + " " + this.nextExperimentNames[i];
-              $("#multi_slider_table").append('<tr class="slider_row"><td class="slider_target" id="sentence' + i + '">' + sentence + '</td><td colspan="2"><div id="single_slider' + j + '" class="slider">-------[ ]--------</div></td></tr>');
+              $("#multi_slider_table").append('<tr class="slider_row"><td class="slider_target" id="sentence' + i + '">' + sentence + '</td><td colspan="2"><div id="single_slider' + i + '" class="slider">-------[ ]--------</div></td></tr>');
               utils.match_row_height("#multi_slider_table", ".slider_target");
-              this.init_sliders(j)
-              utils.make_slider("#single_slider" + j,  this.make_slider_callback(j))
+              this.init_sliders(i)
+              // utils.make_slider("#single_slider" + i,  this.make_slider_callback(i))
             }
 
 
@@ -253,23 +252,21 @@ function make_slides(f) {
     },
     make_slider_callback : function(i) {
       return function(event, ui) {
-        exp.sliderPost = ui.value;
-        (i==0) ? $("#prior_number").html(Math.round(exp.sliderPost*100)+"") :
-        (i==2) ? $("#listener_number").html(Math.round(exp.sliderPost*100)+"") : null
+        exp.sliderPost[i] = ui.value;
       };
     },
 
     button : function() {
       var speakerResponse = $('input[name="speaker"]:checked').val();
       var prompt, utt;
-      console.log(speakerResponse)
+
       var error = 0;
       if (exp.condition == "speaker") {
         if (!speakerResponse) {
           error = 1;
         }
       } else {
-        if (exp.sliderPost==-1) {
+        if ( _.isEmpty(exp.sliderPost) ) {
           error = 1;
         }
       }
@@ -283,28 +280,49 @@ function make_slides(f) {
     },
 
     log_responses : function() {
+      var response = [];
       if (exp.condition == "speaker") {
-        var response = $('input[name="speaker"]:checked').val() == "Yes" ?  1 : 0;
+        response = $('input[name="speaker"]:checked').val() == "Yes" ?  1 : 0;
+        exp.data_trials.push({
+          "trial_type" : "prior_and_posterior",
+          "condition": exp.condition,
+          "trial_num": this.trialNum,
+          "rt":this.rt,
+          "frequency": this.stim.frequency,
+          "category": this.stim.category,
+          "story": this.stim.story,
+          "distribution": this.stim.distribution,
+          "treatment":this.stim.treatment,
+          "unit":this.stim.unit,
+          "target":this.stim.target,
+          "planet": this.stim.planet,
+          "query": this.stim.query,
+          "missing":this.missing,
+          "response": response,
+          "label": -99
+        });
       } else {
-        var response = exp.sliderPost
+        for (var i=0; i<exp.sliderPost.length; i++){
+          exp.data_trials.push({
+            "trial_type" : "prior_and_posterior",
+            "condition": exp.condition,
+            "trial_num": this.trialNum,
+            "rt":this.rt,
+            "frequency": this.stim.frequency,
+            "category": this.stim.category,
+            "story": this.stim.story,
+            "distribution": this.stim.distribution,
+            "treatment":this.stim.treatment,
+            "unit":this.stim.unit,
+            "target":this.stim.target,
+            "planet": this.stim.planet,
+            "query": this.stim.query,
+            "missing":this.missing,
+            "response": exp.sliderPost[i],
+            "label": this.nextExperimentNames[i]
+          });
+        }
       }
-      exp.data_trials.push({
-        "trial_type" : "prior_and_posterior",
-        "condition": exp.condition,
-        "trial_num": this.trialNum,
-        "response" : response,
-        "rt":this.rt,
-        "frequency": this.stim.frequency,
-        "category": this.stim.category,
-        "story": this.stim.story,
-        "distribution": this.stim.distribution,
-        "treatment":this.stim.treatment,
-        "unit":this.stim.unit,
-        "target":this.stim.target,
-        "planet": this.stim.planet,
-        "query": this.stim.query,
-        "missing":this.missing
-      });
     }
   });
 
@@ -350,7 +368,7 @@ function init() {
 
   repeatWorker = false;
   (function(){
-      var ut_id = "mht-causals-20170421";
+      var ut_id = "mht-causals-20170426";
       if (UTWorkerLimitReached(ut_id)) {
         $('.slide').empty();
         repeatWorker = true;
@@ -362,8 +380,8 @@ function init() {
   exp.catch_trials = [];
 
   // exp.condition = _.sample(["prior","speaker","speaker","speaker","speaker","listener"])
-  exp.condition = "prior"
-  exp.nTrials = stories.length;
+  exp.condition = _.sample(["prior","speaker"])
+  exp.nTrials = 1;
 
   exp.stims = [];
   var shuffledDists = _.shuffle(distributions);
@@ -371,7 +389,7 @@ function init() {
   var labels = _.shuffle(creatureNames);
   var planets = _.shuffle(["X137","A325","Z142","Q681"])
 
-  for (var i=0; i<stories.length; i++) {
+  for (var i=0; i<exp.nTrials; i++) {
     var f;
     if (exp.condition == "speaker"){
       f = {
@@ -413,7 +431,7 @@ function init() {
 
   //blocks of the experiment:
    exp.structure=[
-    //  "i0",
+     "i0",
      "prior_elicitation",
      "subj_info",
      "thanks"
