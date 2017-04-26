@@ -39,11 +39,11 @@ var distributions = [
   {
     distribution: "accidental",
     data: [5, 15, 10, 5, 10, 15, 5, 5, 10, 15, 15]
-  },
-  {
-    distribution: "prevalent",
-    data: [75, 60, 65, 75, 80, 40, 80, 75, 80, 90]
-  }
+  }//,
+  // {
+  //   distribution: "prevalent",
+  //   data: [75, 60, 65, 75, 80, 40, 80, 75, 80, 90]
+  // }
 ]
 
 var stories = [
@@ -67,16 +67,16 @@ var stories = [
   //   evidence: "' tails were made to wag",
   //   unit: "tails"
   // },
-  {
-    story: "alert",
-    storyline:  "You are an astronaut-scientist exploring a distant planet. On this planet, there are animals called CATEGORY and your team of scientists wants to figure out what makes CATEGORY more alert. Your team runs experiments trying to make CATEGORY alert with different chemical compounds.",
-    treatment: "compound",
-    target: "makes the animals alert",
-    query: "make the animals alert",
-    past: "made alert",
-    evidence: " were made alert",
-    unit: "animals"
-  },
+  // {
+  //   story: "alert",
+  //   storyline:  "You are an astronaut-scientist exploring a distant planet. On this planet, there are animals called CATEGORY and your team of scientists wants to figure out what makes CATEGORY more alert. Your team runs experiments trying to make CATEGORY alert with different chemical compounds.",
+  //   treatment: "compound",
+  //   target: "makes the animals alert",
+  //   query: "make the animals alert",
+  //   past: "made alert",
+  //   evidence: " were made alert",
+  //   unit: "animals"
+  // },
   {
     story: "hair color",
     storyline:  "You are an astronaut-scientist exploring a distant planet. On this planet, there are animals called CATEGORY and your team of scientists wants to figure out what makes CATEGORY's hair turn brown. Your team runs experiments trying to make CATEGORY's hair turn brown with different chemical compounds.",
