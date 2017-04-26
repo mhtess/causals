@@ -77,26 +77,26 @@ var stories = [
   //   evidence: " were made alert",
   //   unit: "animals"
   // },
-  // {
-  //   story: "hair color",
-  //   storyline:  "You are an astronaut-scientist exploring a distant planet. On this planet, there are animals called CATEGORY and your team of scientists wants to figure out what makes CATEGORY's hair turn brown. Your team runs experiments trying to make CATEGORY's hair turn brown with different chemical compounds.",
-  //   treatment: "compound",
-  //   target: "makes the animals' hair brown",
-  //   query: "make the animals' hair brown",
-  //   past: "made brown",
-  //   evidence: "' hair were made brown",
-  //   unit: "animals' hair"
-  // },
   {
-    story: "salivate",
-    storyline:  "You are an astronaut-scientist exploring a distant planet. On this planet, there are animals called CATEGORY and your team of scientists wants to figure out what makes CATEGORY salivate. Your team runs experiments trying to make CATEGORY salivate with different chemical compounds.",
+    story: "hair color",
+    storyline:  "You are an astronaut-scientist exploring a distant planet. On this planet, there are animals called CATEGORY and your team of scientists wants to figure out what makes CATEGORY's hair turn brown. Your team runs experiments trying to make CATEGORY's hair turn brown with different chemical compounds.",
     treatment: "compound",
-    target: "makes the animals salivate",
-    query: "make the animals salivate",
-    past: "made to salivate",
-    evidence: " were made to salivate",
-    unit: "animals"
-  }
+    target: "makes the animals' hair brown",
+    query: "make the animals' hair brown",
+    past: "made brown",
+    evidence: "' hair were made brown",
+    unit: "animals' hair"
+  }//,
+  // {
+  //   story: "salivate",
+  //   storyline:  "You are an astronaut-scientist exploring a distant planet. On this planet, there are animals called CATEGORY and your team of scientists wants to figure out what makes CATEGORY salivate. Your team runs experiments trying to make CATEGORY salivate with different chemical compounds.",
+  //   treatment: "compound",
+  //   target: "makes the animals salivate",
+  //   query: "make the animals salivate",
+  //   past: "made to salivate",
+  //   evidence: " were made to salivate",
+  //   unit: "animals"
+  // }
   // {
   //   story: "dizzy",
   //   storyline:  "On this planet, there are animals called CATEGORY and your team wants to figure out what makes CATEGORY dizzy. Your team runs experiments trying to make CATEGORY dizzy with different chemical compounds.",
