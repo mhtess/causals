@@ -380,7 +380,8 @@ function init() {
   exp.catch_trials = [];
 
   // exp.condition = _.sample(["prior","speaker","speaker","speaker","speaker","listener"])
-  exp.condition = _.sample(["prior","speaker"])
+  // exp.condition = _.sample(["prior","speaker"])
+  exp.condition = "prior"
   exp.nTrials = 1;
 
   exp.stims = [];
@@ -389,7 +390,7 @@ function init() {
   var labels = _.shuffle(creatureNames);
   var planets = _.shuffle(["X137","A325","Z142","Q681"])
 
-  for (var i=0; i<exp.nTrials; i++) {
+  for (var i=0; i<stories.length; i++) {
     var f;
     if (exp.condition == "speaker"){
       f = {
@@ -417,7 +418,7 @@ function init() {
     )
   };
 
-  exp.stims = _.shuffle(exp.stims);
+  exp.stims = _.shuffle(exp.stims).slice(0, exp.nTrials);
   exp.stimscopy = exp.stims.slice(0);
 
   exp.system = {
