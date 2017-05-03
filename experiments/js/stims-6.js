@@ -24,14 +24,14 @@ var distributions = [
     distribution: "rare",
     data: [0, 10, 0, 0, 0, 15, 0, 0, 0, 0]
   },
-  {
-    distribution: "gendered",
-    data:[0, 0, 50, 0, 0, 50, 0, 0, 0, 0]
-  },
-  {
-    distribution: "female",
-    data: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50]
-  },
+  // {
+  //   distribution: "gendered",
+  //   data:[0, 0, 50, 0, 0, 50, 0, 0, 0, 0]
+  // },
+  // {
+  //   distribution: "female",
+  //   data: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50]
+  // },
   {
     distribution: "deterministic",
     data: [0, 0, 100, 100, 0, 0, 100, 0, 0, 100, 0]
@@ -40,10 +40,10 @@ var distributions = [
     distribution: "accidental",
     data: [5, 15, 10, 5, 10, 15, 5, 5, 10, 15, 15]
   },
-  {
-    distribution: "prevalent",
-    data: [75, 60, 65, 75, 80, 40, 80, 75, 80, 90]
-  }
+  // {
+  //   distribution: "prevalent",
+  //   data: [75, 60, 65, 75, 80, 40, 80, 75, 80, 90]
+  // }
 ]
 
 var stories = [

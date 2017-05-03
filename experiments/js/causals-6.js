@@ -1,6 +1,3 @@
-// so called elicitation task...
-// same as experiment-11, 6 kinds / page
-
 var replaceTerms = function(stim, label){
   var prompt = stim[label];
   return prompt.replace(/CATEGORY/g,
@@ -292,6 +289,7 @@ function make_slides(f) {
           "category": this.stim.category,
           "story": this.stim.story,
           "distribution": this.stim.distribution,
+          "n_data":exp.n_data,
           "treatment":this.stim.treatment,
           "unit":this.stim.unit,
           "target":this.stim.target,
@@ -312,6 +310,7 @@ function make_slides(f) {
             "category": this.stim.category,
             "story": this.stim.story,
             "distribution": this.stim.distribution,
+            "n_data":exp.n_data,
             "treatment":this.stim.treatment,
             "unit":this.stim.unit,
             "target":this.stim.target,
@@ -386,10 +385,10 @@ function init() {
 
   exp.stims = [];
 
-  var n_data = 7;
+  exp.n_data = _.sample([4,8])
 
   var dist = _.sample(distributions);
-  var distSliced = {distribution: dist.distribution, data: dist.data.slice(0, n_data)}
+  var distSliced = {distribution: dist.distribution, data: dist.data.slice(0, exp.n_data)}
 
   var frequency = _.sample(tasks.speaker.frequencies);
   var label = _.sample(creatureNames);
