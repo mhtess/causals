@@ -22,11 +22,11 @@ var tasks = {
 var distributions = [
   {
     distribution: "rare",
-    data: [0, 10, 0, 0, 0, 15, 0, 0, 0, 0]
+    data: [0, 10, 0,15, 0, 10,0, 0, 0, 0]
   },
   {
     distribution: "gendered",
-    data:[0, 0, 50, 0, 0, 50, 0, 0, 0, 0]
+    data:[0, 0, 50, 50, 0,  50,  0, 0, 0, 0]
   },
   // {
   //   distribution: "female",

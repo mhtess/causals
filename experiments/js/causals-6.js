@@ -340,7 +340,7 @@ function make_slides(f) {
             "condition": exp.condition,
             "trial_num": this.trialNum,
             "rt":this.rt,
-            "frequency": this.stim.frequency,
+            "frequency": -99,
             "category": this.stim.category,
             "story": this.stim.story,
             "distribution": this.stim.distribution,
