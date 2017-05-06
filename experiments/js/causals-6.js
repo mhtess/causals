@@ -87,8 +87,9 @@ function make_slides(f) {
       // replace CATEGORY, EXEMPLAR, TREATMENT, PAST from stimuli
       var story = replaceTerms(stim, "storyline")
 
-      $(".data").html("You are on planet " + stim.planet +
-      ". " + story + " " +
+      $(".data").html("You are an astronaut-scientist exploring a distant planet. "+
+        // "You are on planet " + stim.planet +". " +
+      story + " " +
       replaceTerms(_.extend(stim, {preamble}), "preamble"));
       //
       // $(".data").html(story + " " +
@@ -416,7 +417,7 @@ function init() {
   // exp.condition = _.sample(["prior","speaker","speaker","speaker","speaker","listener"])
   // exp.condition = _.sample(["prior","speaker"])
   exp.condition = "prior"
-  exp.nTrials = 4;
+  exp.nTrials = 1;
   exp.nSliders = exp.condition == "prior" ? 4 : 1;
   exp.stims = [];
 
@@ -427,7 +428,7 @@ function init() {
   var frequencies = _.shuffle(tasks.speaker.frequencies);
   var labels = _.shuffle(creatureNames);
   var planets = _.shuffle(["X137","A325","Z142","Q681"])
-  stories = _.shuffle(stories);
+  stories = _.shuffle(stories).slice(0,1);
 
 
   for (var i=0; i<stories.length; i++) {
@@ -510,7 +511,7 @@ function init() {
   //blocks of the experiment:
    exp.structure=[
      "i0",
-     "instructions",
+    //  "instructions",
      "prior_elicitation",
      "subj_info",
      "thanks"

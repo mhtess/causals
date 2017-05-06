@@ -22,24 +22,24 @@ var tasks = {
 var distributions = [
   {
     distribution: "rare",
-    data: [0, 10, 0,15, 0, 10,0, 0, 0, 0]
+    data: [0, 10, 0, 15, 0, 10,0, 0, 0, 0]
   },
-  {
-    distribution: "gendered",
-    data:[0, 0, 50, 50, 0,  50,  0, 0, 0, 0]
-  },
+  // {
+  //   distribution: "gendered",
+  //   data:[0, 0, 50, 50, 0,  50,  0, 0, 0, 0]
+  // },
   // {
   //   distribution: "female",
   //   data: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50]
   // },
-  {
-    distribution: "deterministic",
-    data: [0, 0, 100, 100, 0, 0, 100, 0, 0, 100, 0]
-  },
-  {
-    distribution: "accidental",
-    data: [5, 15, 10, 5, 10, 15, 5, 5, 10, 15, 15]
-  }
+  // {
+  //   distribution: "deterministic",
+  //   data: [0, 0, 100, 100, 0, 0, 100, 0, 0, 100, 0]
+  // },
+  // {
+  //   distribution: "accidental",
+  //   data: [5, 15, 10, 5, 10, 15, 5, 5, 10, 15, 15]
+  // }
   // {
   //   distribution: "prevalent",
   //   data: [75, 60, 65, 75, 80, 40, 80, 75, 80, 90]
@@ -67,7 +67,7 @@ var stories = [
     experimentResults: "Of those 100 attempts, the machine played music <strong>N</strong> times.",
     lostResults: "The results of this experiment have been misplaced so <strong>we don't know</strong> how many times the machine played music.",
     otherExperiments: "your team put a new object on the machine 100 times.",
-    priorQuestion: "How many times do you think each object made the machine play music?",
+    priorQuestion: "How many times do you think each object will make the machine play music?",
     target: "makes the machine play music",
     query: "make the play music",
     past: "played music",
@@ -83,7 +83,7 @@ var stories = [
     experimentResults: "Of those 100 treated, <strong>N</strong> CATEGORY were made sleepy.",
     lostResults: "The results of this experiment have been misplaced so <strong>we don't know</strong> how many CATEGORY were made sleepy.",
     otherExperiments: "your team gave an herb to 100 different CATEGORY.",
-    priorQuestion: "<strong>How many CATEGORY do you think were made sleepy by each herb</strong>?",
+    priorQuestion: "<strong>How many CATEGORY do you think will be made sleepy by each herb</strong>?",
     target: "makes CATEGORY sleepy",
     query: "make the animals sleepy",
     past: "made sleepy",
@@ -99,7 +99,7 @@ var stories = [
     experimentResults: "Of those 100 treated, <strong>N</strong> CATEGORY grew tall.",
     lostResults: "The results of this experiment have been misplaced so <strong>we don't know</strong> how many CATEGORY grew tall.",
     otherExperiments: "your team gave different fertilizers to 100 different CATEGORY.",
-    priorQuestion: "<strong>How many CATEGORY do you think were made to grow tall by each ferilizer</strong>?",
+    priorQuestion: "<strong>How many CATEGORY do you think will be made to grow tall by each ferilizer</strong>?",
     target: "makes CATEGORY grow tall",
     query: "make the plants grow tall",
     past: "grew tall",
@@ -114,7 +114,7 @@ var stories = [
     experimentResults: "Of those 100 treated, <strong>N</strong> EXEMPLAR dissolved into particles.",
     lostResults: "The results of this experiment have been misplaced so <strong>we don't know</strong> how many EXEMPLAR dissolved into particles.",
     otherExperiments: "your team gave a compound to 100 different EXEMPLAR.",
-    priorQuestion: "<strong>How many EXEMPLAR do you think were made to dissolve by each compound</strong>?",
+    priorQuestion: "<strong>How many EXEMPLAR do you think will be made to dissolve by each compound</strong>?",
     treatment: "compound",
     target: "makes the rocks dissolve",
     query: "make the rocks dissolve",
