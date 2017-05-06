@@ -74,6 +74,8 @@ function make_slides(f) {
       $("#evidenceDescription").hide();
       $("#nextExptButton").show()
 
+      $("#nextExptButton").html("Look at results of next experiment");
+
       this.count = 0;
       this.waitFlag = 1;
       // which half of trial we're in
@@ -85,12 +87,12 @@ function make_slides(f) {
       // replace CATEGORY, EXEMPLAR, TREATMENT, PAST from stimuli
       var story = replaceTerms(stim, "storyline")
 
-      // $(".data").html("You are on planet " + stim.planet +
-      // ". " + story + " " +
-      // replaceTerms(_.extend(stim, {preamble}), "preamble"));
-
-      $(".data").html(story + " " +
+      $(".data").html("You are on planet " + stim.planet +
+      ". " + story + " " +
       replaceTerms(_.extend(stim, {preamble}), "preamble"));
+      //
+      // $(".data").html(story + " " +
+      // replaceTerms(_.extend(stim, {preamble}), "preamble"));
 
       // debugger;
       // this.missing = _.sample([1,2,3,4,5,6,7,8,9]);
@@ -108,7 +110,8 @@ function make_slides(f) {
       $("#d-1a").hide()
       $("#d-1").css({"border":"1px solid black","font-size":"14px", "font-weight":"bold", "width":"20%"});
       $("#d-1").html(stim.unit + " " + stim.past);
-      $("#d-1a").html(stim.unit + " treated")
+      // $("#d-1a").html(stim.unit + " treated")
+      $("#d-1a").html(stim.unit + " " + stim.event)
       $("#d-1a").css({"border":"1px dotted black"});
 
       stim.targetTreatment = stim.treatment+ " " + this.experimentNames[this.missing]
@@ -141,10 +144,33 @@ function make_slides(f) {
       $("#d" + i + "a").css({"border":"1px dotted black"});
 
       $("#evidenceDescription").show();
+
+      var experimentEvent = this.stim.experiment;
+      experimentEvent = experimentEvent.replace("SPECIAL", this.stim.treatment + " " +  this.experimentNames[i]).replace("CATEGORY", this.stim.category).replace("EXEMPLAR", this.stim.exemplar);
+
+      var experimentResults = this.stim.experimentResults;
+
+      experimentResults = experimentResults.replace("N", this.stim.data[i]).replace("CATEGORY", this.stim.category).replace("EXEMPLAR", this.stim.exemplar)
+
       if (this.stim.data[i] == "?") {
-        $("#evidenceDescription").html("Your team treated "+isAnother+"100 " + this.stim.category + " with " + this.stim.treatment + " " + this.experimentNames[i] + ". <br>The results of this experiment have been misplaced so <strong>we don't know</strong> how many " + this.stim.category + " " + this.stim.evidence +".");
+
+        // $("#evidenceDescription").html("Your team "+ experimentEvent + isAnother + " 100 " + this.stim.category + "<br>The results of this experiment have been misplaced so <strong>we don't know</strong> how many " + this.stim.category + " " + this.stim.evidence +".");
+
+        $("#evidenceDescription").html(experimentEvent + "<br>" + this.stim.lostResults.replace("CATEGORY", this.stim.category).replace("EXEMPLAR", this.stim.exemplar))
+
+        //
+        // $("#evidenceDescription").html("Your team treated "+isAnother+"100 " + this.stim.category + " with " + this.stim.treatment + " " + this.experimentNames[i] + ". <br>The results of this experiment have been misplaced so <strong>we don't know</strong> how many " + this.stim.category + " " + this.stim.evidence +".");
+
+
       } else {
-        $("#evidenceDescription").html("Your team treated "+isAnother+"100 " + this.stim.category + " with " + this.stim.treatment + " " + this.experimentNames[i] + ". <br>By the end of the experiment, <strong>" + this.stim.data[i] + "</strong> " + this.stim.category +  " "+this.stim.evidence +".");
+
+        $("#evidenceDescription").html(experimentEvent + "<br>" + experimentResults)
+
+
+          // "Your team "+ experimentEvent + isAnother +  " 100 " + this.stim.category +". <br>As a result, <strong>" + this.stim.data[i] + "</strong> " + this.stim.category +  this.stim.evidence +".");
+        // $("#evidenceDescription").html("Your team treated "+isAnother+"100 " + this.stim.category + " with " + this.stim.treatment + " " + this.experimentNames[i] + ". <br>By the end of the experiment, <strong>" + this.stim.data[i] + "</strong> " + this.stim.category +  " "+this.stim.evidence +".");
+
+
       }
 
       if (this.count == (this.experimentNames.length - 1)) {
@@ -176,7 +202,8 @@ function make_slides(f) {
           if (exp.condition == "prior"){
             // utils.make_slider("#single_slider0", this.make_slider_callback(0))
             // prior questions and sliders
-            $(".question0").html("There were 4 other experiments conducted that day.<br>For each one, your team treated another 100 " + this.stim.category + " with a different " + this.stim.treatment + ".<br> How many " + this.stim.category + " do you think " +this.stim.evidence + " after each treatment?")
+            $(".question0").html("There were 4 other experiments conducted that day.<br>For each one, "+
+            replaceTerms(this.stim, "otherExperiments") + "<br>" + replaceTerms(this.stim, "priorQuestion") )
             this.nextExperimentNames = ["M", "N", "P", "Q"];
 
 
@@ -211,8 +238,10 @@ function make_slides(f) {
             $(".question2").show();
 
             prompt = replaceTerms(this.stim, "prompt");
-            prompt +=  "<br>" + replaceTerms(this.stim, "frequencyStatement") + "<br>By the end of the experiment, <strong>" + this.stim.data[i] + "</strong> " + this.stim.category +  " "+this.stim.evidence +". <br>";
-            utt = 'Judge the following statement: <strong>"' + jsUcfirst(replaceTerms(this.stim, "utterance"))+ '"</strong>';
+            prompt +=  "<br>" + replaceTerms(this.stim, "experiment") + "<br>"+this.stim.experimentResults.replace("N", this.stim.frequency).replace("EXEMPLAR", this.stim.exemplar).replace("CATEGORY", this.stim.category)
+
+            // By the end of the experiment, <strong>" + this.stim.frequency + "</strong> " + this.stim.category +  " "+this.stim.evidence +". <br>";
+            utt = 'Judge the following statement: <strong>"' + jsUcfirst(replaceTerms(this.stim, "utterance")).replace("CATEGORY", this.stim.category)+ '"</strong>';
 
             $("#speaker_choices").show();
             $(".task_prompt").html(prompt);
@@ -263,7 +292,12 @@ function make_slides(f) {
           error = 1;
         }
       } else {
-        if ( _.isEmpty(exp.sliderPost) ) {
+        for (var i=0; i<exp.nSliders; i++) {
+          if (typeof exp.sliderPost[i] == 'undefined') {
+            error = 1;
+          }
+        }
+        if (exp.sliderPost.length !== exp.nSliders) {
           error = 1;
         }
       }
@@ -378,51 +412,90 @@ function init() {
   exp.trials = [];
   exp.catch_trials = [];
 
+
   // exp.condition = _.sample(["prior","speaker","speaker","speaker","speaker","listener"])
   // exp.condition = _.sample(["prior","speaker"])
   exp.condition = "prior"
-  exp.nTrials = 1;
-
+  exp.nTrials = 4;
+  exp.nSliders = exp.condition == "prior" ? 4 : 1;
   exp.stims = [];
 
-  exp.n_data = _.sample([4,8])
+  exp.n_data = _.shuffle([4,4,4,4])
 
-  var dist = _.sample(distributions);
-  var distSliced = {distribution: dist.distribution, data: dist.data.slice(0, exp.n_data)}
+  var dist = _.shuffle(distributions);
 
-  var frequency = _.sample(tasks.speaker.frequencies);
-  var label = _.sample(creatureNames);
-  var planet = _.sample(["X137","A325","Z142","Q681"])
-  var story = _.sample(stories);
+  var frequencies = _.shuffle(tasks.speaker.frequencies);
+  var labels = _.shuffle(creatureNames);
+  var planets = _.shuffle(["X137","A325","Z142","Q681"])
+  stories = _.shuffle(stories);
 
-  var f;
+
+  for (var i=0; i<stories.length; i++) {
+    var f;
+    var distSliced = {
+      distribution: dist[i].distribution,
+      data: dist[i].data.slice(0, exp.n_data[i]),
+      n_data: exp.n_data[i]
+    }
     if (exp.condition == "speaker"){
       f = {
-        frequency: frequency,
-        category: label.category,
-        exemplar: label.exemplar,
+        frequency: frequencies[i],
+        category: labels[i].category,
+        exemplar: labels[i].exemplar,
         prompt: tasks.speaker.prompt,
         utterance: tasks.speaker.utterance,
         question: tasks.speaker.question,
         frequencyStatement: tasks.speaker.frequencyStatement,
-        planet: planet
+        planet: planets[i]
       };
     } else {
       f = {
-        category: label.category,
-        exemplar: label.exemplar,
+        category: labels[i].category,
+        exemplar: labels[i].exemplar,
         prompt: tasks.listener.prompt,
         utterance: tasks.listener.utterance,
         question: tasks.listener.question,
-        planet: planet
+        planet: planets[i]
       }
     }
-  exp.stims.push(
-    _.extend(story, distSliced, f)
-  )
+    exp.stims.push(
+      _.extend(stories[i], distSliced, f)
+    )
+  };
+
+// console.log(exp.stims)
+
+  // var f;
+  //   if (exp.condition == "speaker"){
+  //     f = {
+  //       frequency: frequency,
+  //       category: label.category,
+  //       exemplar: label.exemplar,
+  //       prompt: tasks.speaker.prompt,
+  //       utterance: tasks.speaker.utterance,
+  //       question: tasks.speaker.question,
+  //       frequencyStatement: tasks.speaker.frequencyStatement,
+  //       planet: planet
+  //     };
+  //   } else {
+  //     f = {
+  //       category: label.category,
+  //       exemplar: label.exemplar,
+  //       prompt: tasks.listener.prompt,
+  //       utterance: tasks.listener.utterance,
+  //       question: tasks.listener.question,
+  //       planet: planet
+  //     }
+  //   }
+  // exp.stims.push(
+  //   _.extend(story, distSliced, f)
+  // )
 
 
-  exp.stims = _.shuffle(exp.stims).slice(0, exp.nTrials);
+
+
+
+  // exp.stims = _.shuffle(exp.stims).slice(0, exp.nTrials);
   exp.stimscopy = exp.stims.slice(0);
 
   exp.system = {
@@ -436,7 +509,8 @@ function init() {
 
   //blocks of the experiment:
    exp.structure=[
-    //  "i0",
+     "i0",
+     "instructions",
      "prior_elicitation",
      "subj_info",
      "thanks"
