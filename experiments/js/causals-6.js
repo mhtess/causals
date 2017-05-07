@@ -44,7 +44,7 @@ function make_slides(f) {
     //this gets run only at the beginning of the block
     present_handle : function(stim) {
       var prompt, utt;
-
+      console.log(stim)
       // show prior questions and responses
       $(".question0").hide();
       $("#slider_table0").hide();
@@ -203,9 +203,9 @@ function make_slides(f) {
           if (exp.condition == "prior"){
             // utils.make_slider("#single_slider0", this.make_slider_callback(0))
             // prior questions and sliders
-            $(".question0").html("There were 4 other experiments conducted that day.<br>For each one, "+
+            $(".question0").html("There were "+exp.nSliders+" other experiments conducted that day.<br>For each one, "+
             replaceTerms(this.stim, "otherExperiments") + "<br>" + replaceTerms(this.stim, "priorQuestion") )
-            this.nextExperimentNames = ["M", "N", "P", "Q"];
+            this.nextExperimentNames = ["M", "N", "P", "Q", "R", "S"].slice(0, exp.nSliders);
 
 
             $(".slider_row").remove();
@@ -324,7 +324,7 @@ function make_slides(f) {
           "category": this.stim.category,
           "story": this.stim.story,
           "distribution": this.stim.distribution,
-          "n_data":exp.n_data,
+          "n_data":this.stim.n_data,
           "treatment":this.stim.treatment,
           "unit":this.stim.unit,
           "target":this.stim.target,
@@ -345,7 +345,7 @@ function make_slides(f) {
             "category": this.stim.category,
             "story": this.stim.story,
             "distribution": this.stim.distribution,
-            "n_data":exp.n_data,
+            "n_data":this.stim.n_data,
             "treatment":this.stim.treatment,
             "unit":this.stim.unit,
             "target":this.stim.target,
@@ -418,7 +418,7 @@ function init() {
   // exp.condition = _.sample(["prior","speaker"])
   exp.condition = "prior"
   exp.nTrials = 1;
-  exp.nSliders = exp.condition == "prior" ? 4 : 1;
+  exp.nSliders = exp.condition == "prior" ? 6 : 1;
   exp.stims = [];
 
   exp.n_data = _.shuffle([4,4,4,4])
