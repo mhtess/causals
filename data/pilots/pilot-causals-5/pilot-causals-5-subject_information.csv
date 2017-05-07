@@ -1,0 +1,241 @@
+"workerid","language","enjoyment","gender","age","problems","comments","asses","fairprice","education"
+0,"english",0,"Male",25,"no","none","Yes",".50",2
+1,"english",0,"Male",26,"","","Yes","0.50",1
+2,"English",0,"Female",58,"no","","Yes",".50",3
+3,"english",0,"Male",26,"no","","Yes","0.25",3
+4,"English",0,"Male",25,"no","","Yes","0.25",3
+5,"English",1,"Male",28,"No.","","Yes","0.25",3
+6,"English",0,"Male",29,"No","","Yes",".25",2
+7,"English",1,"Male",40,"no","It is a stretch in my view to make a definitive claim in the positive when 80/100 showed no difference.","Yes","$0.25",3
+8,"English",0,"Male",48,"Well there was no test result for the letter I","","Yes",".50",2
+9,"",0,"Male",NA,"","","Yes","35",-1
+10,"English",1,"Female",42,"No","It was fun.","Yes","20 cents",3
+11,"English",1,"Male",28,"It seemed like the sliders did not show the amount selected so I sort of had to guess when trying to pick 5 and so on for what I expected the experiments to yield in terms of alertness. ","","Yes","25",3
+12,"English",1,"Male",28,"No issues to report.","","Yes","25",1
+13,"English",1,"Male",36,"no","nothing to add","Yes","0.25",2
+14,"",99,"",NA,"","",NA,"",-1
+15,"English",1,"Female",39,"","Task seemed clear, but I would have liked for a number to show up when I moved the sliding scale so I could put it on an exact number.","Yes","yes",4
+16,"English",1,"Male",35,"no","","Yes",".50",2
+17,"english",0,"Male",NA,"","","Yes",".75",2
+18,"English",0,"Female",67,"","","Confused","yes",2
+19,"English",1,"Female",37,"","","Yes",".75",3
+20,"English",0,"Female",45,"no","","Yes","0.30",3
+21,"English",1,"Female",60,"No","Thanks","Yes",".25",2
+22,"english",0,"Male",40,"no","","Yes",".25",1
+23,"english",1,"Female",30,"none","none","Yes",".25",2
+24,"English",0,"Female",45,"no","","Yes",".15",2
+25,"english",0,"Male",32,"no","","No","30",3
+26,"English",1,"Male",24,"No","Great study!","Yes",".10",3
+27,"English",1,"Male",37,"No","","Yes",".15",2
+28,"English",0,"Male",37,"No problems or bugs","No comments","Yes","0.25",2
+29,"English",1,"Male",29,"No","","Yes","Yes",4
+30,"English ",0,"Male",27,"None ","","Yes","$.50",3
+31,"English",1,"Male",37,"No","Thanks!","Yes",".25",3
+32,"     english",0,"Female",33,"","","Confused",".25",2
+33,"English",1,"Female",31,"No","Thank you!","Yes","0.30",2
+34,"english",0,"Female",31,"no","","Yes","0.30",2
+35,"English",0,"Female",35,"","","Yes",".27",2
+36,"English",1,"Female",44,"","","Yes",".25",3
+37,"English",-1,"Male",30,"No","","Yes","An extra 10 cents or so would have probably made it better.  But, this isn&quotechart horrible or anything.",1
+38,"English",1,"Male",31,"","","Yes","0.25",1
+39,"english",1,"Male",26,"no","","Confused","25",3
+40,"English",1,"Male",25,"There was no number associated with the slider in the answer section.","Interested in where the data from experiment D went.","Yes","yes",2
+41,"English",0,"Male",34,"none","thanks","No","yes",2
+42,"English",1,"Male",34,"No issues.","","Yes","",1
+43,"English",0,"Female",28,"No","Thank you","Yes","25",3
+44,"English",1,"Male",25,"no","","Yes",".25",3
+45,"english",1,"Female",25,"na","","Yes",NA,2
+46,"english",1,"Female",30,"not in the real one, just the theoretical one","","Yes",NA,3
+47,"English",0,"Female",52,"no","Very interesting, thank you!","Yes","0.5",3
+48,"English",0,"Female",40,"no","","Yes","0.25",3
+49,"english",0,"Female",47,"no","","Yes","0.25",0
+50,"English",1,"Female",25,"No","None","Yes","0.25",2
+51,"English",1,"Male",46,"No","","Yes","25",3
+52,"english",1,"Female",51,"no","","Yes","30",3
+53,"English",0,"Female",74,"none","","Yes","0.5",3
+54,"english",0,"Male",34,"no","no","Yes",".50",3
+55,"English",0,"Female",23,"","","Confused",".25",2
+56,"english",0,"Male",24,"nope","","No","yes",2
+57,"English",-1,"Female",66,"not technically","I did not like the idea of testing over 1000 innocent animals with chemicals, I have to admit that bothered me!  ","Yes","25 cents is OK",3
+58,"English",0,"Male",26,"No.","","Yes",".20",3
+59,"English",1,"Female",25,"","","Yes","Yes",2
+60,"English ",0,"Female",38,"no","","Yes",".40",4
+61,"English",0,"Female",27,"No","","Yes",".15",3
+62,"English",0,"Female",41,"No","","Yes",".25",3
+63,"English",0,"Female",34,"no","","Yes",".50",3
+64,"English",0,"Male",35,"","","Confused","0.25",1
+65,"English",0,"Male",29,"The sliders at the end didn&quotechart indicate any numbers.","","Confused",".25",2
+66,"English",0,"",23,"","","Confused","Fair",2
+67,"English",1,"Male",26,"No","I always love space stuff","Yes","Yes",2
+68,"english",0,"Male",27,"need for better scale","","Yes",".25",3
+69,"English",1,"Male",24,"No","","Yes","Yes",3
+70,"English",0,"Male",40,"no issue","","Yes",".25",3
+71,"eng",0,"Male",27,"","","Yes",".50",2
+72,"English",0,"Male",27,"None",NA,"Yes","0.25",3
+73,"English",0,"Male",41,"",NA,"Yes",".25",3
+74,"english",1,"Female",26,"no",NA,"Confused","25",2
+75,"english",1,"Male",27,"",NA,"Yes","10 cents",3
+76,"English",1,"Male",18,"No.",NA,"Yes","0.25",1
+77,"Spanish",-1,"Female",27,"",NA,"Confused","yes",2
+78,"English",1,"Female",25,"",NA,"Yes","25",3
+79,"English",1,"Female",23,"None",NA,"Yes",".25",3
+80,"English",0,"Female",24,"I couldn&quotechart see the number I was selecting.",NA,"Yes",".25",3
+81,"English",0,"Male",37,"no","","Yes",".50",1
+82,"English",1,"Female",69,"","none","Yes",".25",2
+83,"English",1,"Female",28,"No","I said that compound G did not make the Ollers allert because only 20% became alert and I felt that number was too low to make a generic ""it works"" statement from.","Yes","Yes",2
+84,"English",1,"Male",35,"no","","No",".25",2
+85,"english",1,"Male",27,"","","Yes",".25",1
+86,"english",1,"Female",43,"no","","Yes",".25",4
+87,"English",0,"Male",29,"no","","Yes",".25",3
+88,"english",0,"Male",62,"none","","Yes",".35",2
+89,"eng",0,"Male",33,"","","Yes","",1
+90,"English",0,"Male",26,"No","n/a","Yes","0.25",1
+91,"English",1,"Female",50,"no","","Yes","20",4
+92,"english",1,"Male",23,"no","","Yes",".30",1
+93,"English",0,"Male",56,"All seemed fine.","","Yes",".40",2
+94,"English",1,"Male",28,"","","Yes","25 cents",2
+95,"English",0,"Male",39,"no","","Yes","0.30",1
+96,"english",1,"Female",20,"","","Yes","",2
+97,"English",1,"Male",21,"no","","Yes","0.30",2
+98,"English",0,"Female",49,"no","","Yes","yes",3
+99,"English",0,"Female",24,"",NA,"Yes",".25",1
+100,"English",0,"Male",34,"No.",NA,"Yes","0.25",3
+101,"English",1,"Male",20,"Lack of numerical values on slider when answering the questions.",NA,"Yes","0.25-0.50",2
+102,"English",0,"Female",40,"",NA,"Confused","yes",2
+103,"english",1,"Male",50,"",NA,"Yes","yes",2
+104,"english",0,"Male",37,"",NA,"Yes","",2
+105,"english",0,"Male",25,"no",NA,"No","0.2",3
+106,"English",1,"Female",34,"",NA,"Yes","yes",3
+107,"English",1,"Female",26,"No",NA,"Yes","Yes",3
+108,"English",1,"Male",38,"",NA,"Yes",".2",2
+109,"English",0,"Male",27,"No",NA,"No",".25",3
+110,"English",0,"Male",27,"No",NA,"Yes",".20",2
+111,"English and Arabic",1,"Female",50,"couldn&quotechart see the exact number I was pulling the answers towards, so I just guessed.",NA,"Yes","0.25",3
+112,"english",0,"Female",42,"",NA,"Confused",".20",4
+113,"English",0,"Female",27,"N/A",NA,"Yes","0.30",3
+114,"english",1,"Female",29,"",NA,"Yes","0.25",1
+115,"English",0,"Female",23,"",NA,"Yes","$0.25",3
+116,"English",1,"Male",53,"None that I noticed.",NA,"Yes","25 cents",2
+117,"English",0,"Female",26,"no","","Yes",".25 is fine",2
+118,"english",0,"Female",27,"","","Yes",".25",3
+119,"english",1,"Female",36,"No","","Yes",".25",3
+120,"English",0,"Male",47,"no","","Yes",".30",4
+121,"English",0,"Male",44,"no","","Yes","50 cents",2
+122,"English",0,"Female",51,"no","","Yes",".25",4
+123,"english",0,"Female",26,"","","Yes",".25",3
+124,"english",0,"Male",61,"none","ty","Yes",".25",2
+125,"English",0,"Male",52,"No, but the sliders would not let me see a precise number to pick.","","Yes","50 cents",2
+126,"English",1,"Male",26,"","","Yes","Yes",3
+127,"English",0,"Male",30,"No.","","Yes","50 cents",3
+128,"English",1,"Female",43,"","","Yes",".25",2
+129,"english",0,"Female",36,"none","","Yes",".3",2
+130,"ENGLISH",1,"Female",33,"","","Yes","",1
+131,"English",1,"Male",32,"No","","Yes","$0.35",4
+132,"English",1,"Female",37,"","","Yes",".25",3
+133,"English",0,"Male",29,"no","none","Yes","0.50",3
+134,"English",0,"Female",54,"no","interesting.","Yes","45",1
+135,"English",0,"Female",73,"",NA,"Yes","as stated",3
+136,"Japanese",1,"Female",25,"",NA,"Yes","0.25",3
+137,"eng",0,"Female",32,"no",NA,"Yes","50",2
+138,"English",0,"Male",36,"",NA,"Yes",".50",3
+139,"English",0,"Male",43,"no",NA,"Yes","yes",2
+140,"English",1,"Female",25,"This page is lagging bad",NA,"Yes","$0.45",2
+141,"English",1,"Female",51,"no",NA,"Yes","yes",2
+142,"english",0,"Female",51,"no",NA,"Yes",".75",3
+143,"english",0,"Male",47,"no",NA,"Yes",".25",3
+144,"English",1,"Female",28,"moreths","","Yes",".50",2
+145,"English",1,"Female",65,"no","I think we should leave the Daiths alone. Maybe they don&quotechart feel good when they are alert.","Yes","yes",4
+146,"English",1,"Female",25,"","","Confused",".30",3
+147,"English",0,"Male",23,"no","","Yes",".30",3
+148,"English",0,"Male",25,"No.","","Yes",".25",3
+149,"English",0,"Female",42,"No","","Yes","0.35",3
+150,"English",0,"Female",55,"No","","Yes","25",4
+151,"English",0,"Male",20,"No","None","Yes","0.25",2
+152,"Tamil",1,"Female",35,"no","","Yes","0.50",4
+153,"English",0,"Female",66,"No.","No.","Yes","25",3
+154,"English",1,"Male",46,"No, everything worked fine in the end.","Well, I just would say that I answered yes since 20 out of 100 implies a partial affirmative whereas answering no could imply a 0 out of 100 reaction. ","Yes",".25",2
+155,"English",1,"Male",33,"","I think I was supposed to look for a particular pattern in the compound alertness numbers.","Confused",".10",4
+156,"English",0,"Female",46,"no","None","Yes","yes",3
+157,"Eng",0,"Male",26,"","","Yes",".25",1
+158,"English",0,"Female",47,"no","thank you :) ","Yes",".30",2
+159,"English",0,"Male",53,"No","I thought at the end I would need to guess what was in ? I thought it might be 5","Yes",".25",2
+160,"English",0,"Male",33,"nope","","Yes","35 cents",2
+161,"english",1,"Male",34,"No","have a nice day!","Yes",".25",3
+162,"English",0,"Male",26,"no","","Yes",".50",2
+163,"English",1,"Female",51,"no","","Yes","25 cents",3
+164,"English",1,"Female",36,"","","Yes",".25",3
+165,"English",1,"Male",35,"No","Thank you!","No",".50",2
+166,"English",0,"Male",33,"no","","Yes","0.30",3
+167,"English",0,"Male",32,"no","","Yes","yes",3
+168,"english",0,"Female",19,"","","Yes",".90",2
+169,"english",0,"Female",41,"","I was horrible in science and biology in school","Confused","yes",3
+170,"English",1,"Female",29,"no","","Yes","0.30",2
+171,"English",0,"Male",45,"no","no","Yes","0.25",3
+172,"English",1,"Female",27,"","","Yes","0.25",3
+173,"english",1,"Female",33,"no","","Yes",NA,3
+174,"English",0,"Female",31,"No","","Yes","0.25",2
+175,"",99,"",NA,"","",NA,NA,-1
+176,"English",1,"Male",25,"","","Yes",NA,2
+177,"English",0,"Male",31,"","","Yes","0.25",2
+178,"english",1,"Female",28,"no","","Yes","0.25",2
+179,"English",1,"Male",41,"No, everything appeared to work fine.","This was an enjoyable experiment and I am glad that I participated.","Yes","0.25",2
+180,"English",0,"Male",30,"no",NA,"Yes",".30",3
+181,"English",1,"Male",23,"No",NA,"Yes",".30",2
+182,"english",0,"Female",39,"",NA,"Yes",".25",2
+183,"English",0,"Male",23,"none",NA,"Yes","yes",3
+184,"English",1,"Female",42,"no",NA,"Yes",".50",2
+185,"english",0,"Female",65,"no",NA,"Yes","17 million dollars",3
+186,"English",0,"Female",47,"",NA,"Yes",".50",3
+187,"English",0,"Female",67,"No.",NA,"Confused",".50",3
+188,"English",1,"Female",40,"",NA,"Yes",".25",2
+189,"English",1,"Male",24,"No","","Yes",".25",2
+190,"English",1,"Male",31,"","","Yes","0.25",4
+191,"English",0,"Male",27,"no","","Yes",".25",2
+192,"English",0,"Female",18,"","","Yes","10",1
+193,"english",-1,"Female",33,"","I did not think the statement was one fo the findings in the experiment. But based my answer on that statement.","Yes",".50",3
+194,"English",0,"Male",37,"no","","Yes","$.25",4
+195,"Englishh",1,"Male",26,"No","","Yes",".20",3
+196,"English",0,"Male",37,"","","Yes","yes",1
+197,"English",0,"Female",37,"no","","Yes","yes",3
+198,"English",0,"Male",25,"No","","Yes","This works",3
+199,"English",0,"Male",40,"no","","Yes",".25",3
+200,"eng",0,"Male",28,"","","Yes",".30",2
+201,"e",0,"Male",28,"","","Yes","350",-1
+202,"English",0,"Female",55,"no","*solely* compound B?  Or among things that can cause hair to turn brown?  ","Confused","yes",3
+203,"English",1,"Female",47,"no","","Yes",".25",3
+204,"English",0,"Male",35,"","","Yes",".30",4
+205,"english",1,"Male",44,"no","","No","1,000 :)",3
+206,"English",1,"Male",34,"no","","Yes","0.25",1
+207,"english",0,"Male",27,"no","","Yes","yes",3
+208,"English",1,"Female",25,"None","","Yes","0.25",2
+209,"english",0,"Female",35,"no","no","Yes",".25",3
+210,"English",1,"Male",29,"","","Yes",".25",2
+211,"English",1,"Male",39,"No","Thanks","Yes",".25",2
+212,"English",0,"Female",30,"","","Yes",".30",2
+213,"english",1,"Male",36,"no","","Yes","0.25",4
+214,"English",1,"Female",40,"","I thought it would be a longer survey. :-)","Yes",".25",3
+215,"English",0,"Female",44,"no","","Yes","50 cents",2
+216,"English",0,"Female",38,"no","none","Yes","ys",2
+217,"english",0,"Female",54,"no","","Yes","25",3
+218,"English",1,"Female",50,"No.","Kind of a strange hit! I judged the statement not to be very true - only somewhat true. The compound makes some pangolins alert - but not a significant amount(in my mind anyway) to make a definitive statement.","Yes","50 cents",3
+219,"English",-1,"Male",46,"none","","Yes","0.25",3
+220,"english",1,"Male",30,"no","","Yes","yes",2
+221,"English",1,"Female",28,"no","","Yes","yes",1
+222,"English",0,"Male",30,"none","","Yes",".30",3
+223,"english",0,"Female",70,"no","","Yes","0.25",1
+224,"english",0,"Female",29,"no","","Yes","0.25",3
+225,"English",1,"Male",41,"Everything worked fine.","","Yes",".25",2
+226,"English",0,"Male",34,"No problems","I thought this was interesting","Yes",".25",4
+227,"English",0,"Female",36,"No.","None.","Yes","0.40",2
+228,"English",0,"Male",26,"No.","","Yes","0.5",3
+229,"English",1,"Male",31,"no","","Yes",".15",3
+230,"English",0,"Female",28,"","","Yes",".25",3
+231,"English",1,"Female",40,"no","","Yes",".25",3
+232,"English",1,"Female",55,"Not that I&quotecharm aware of.","Novel.","Yes","50 cents",2
+233,"English",1,"Male",31,"no","","Yes",".25",3
+234,"English",0,"Female",28,"No everything worked fine","","Yes","yes",3
+235,"English",0,"Male",33,"no","","Yes","ne",3
+236,"English",1,"Male",32,"No issues","No concerns","Yes","0.25",3
+237,"ENGLISH",1,"Male",49,"","","Yes",".25",4
+238,"English",0,"Male",30,"No, not that I noticed.","","Yes","0.25",2
+239,"English",1,"Female",56,"no","thank you","Yes","0.25",1

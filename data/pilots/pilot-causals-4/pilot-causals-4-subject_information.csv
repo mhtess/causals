@@ -1,0 +1,91 @@
+"workerid","language","enjoyment","gender","age","problems","comments","asses","fairprice","education"
+0,"english",-1,"Male",34,"","","Yes","0.5",3
+1,"English",0,"Male",28,"no","","Yes",".40",2
+2,"english",0,"Male",29,"na","ty","Yes",".25",1
+3,"english",1,"Female",30,"none","none","Yes","$0.25 ",2
+4,"English",1,"Male",54,"no","","Yes",".40",3
+5,"English",0,"Male",28,"nO","","Yes","Yes",2
+6,"eng",1,"Female",32,"no","","Yes","25",2
+7,"English",0,"Female",49,"","","Yes",".30",3
+8,"English",1,"Female",36,"No, there were no problems.","It was fun and different, thank you.","Yes",".25 is a fair price",2
+9,"English",0,"Female",43,"","","Yes",".50",3
+10,"English",0,"Male",34,"no","","Yes",".30",3
+11,"English",0,"Female",26,"None","None","Yes",".25",3
+12,"Japanese",1,"Female",55,"No","","Yes",".30",2
+13,"English",1,"Male",27,"no","","Yes","0.25",1
+14,"English",0,"Male",32,"No","","Yes","Yes",4
+15,"english",0,"Male",51,"no","n/a","Yes","yes",2
+16,"English",0,"Male",45,"no","","Yes","0.25",2
+17,"English",1,"Female",51,"none that I noticed","fun--thanks!","Yes","yes",3
+18,"English",1,"Female",31,"No","","Yes","0.50",3
+19,"english",0,"Female",31,"no","","Yes",".25",2
+20,"english",1,"Female",49,"no","","Yes","yes",4
+21,"",0,"Male",NA,"","","Yes","more",-1
+22,"English",0,"Female",53,"n/a","thanks","Yes",".25",3
+23,"english",0,"Male",63,"no","","Yes","yes",3
+24,"English",0,"Female",54,"no","none","Yes",".50",1
+25,"English",1,"Female",66,"I don&quotechart think I encountered any","This was an interesting survey.  Thanks for letting me participate and good luck with your data collection.","Yes",".25",3
+26,"English",1,"Male",26,"","","Yes",".25",3
+27,"English",1,"Male",26,"Not at all","","Yes","0.40",2
+28,"english",1,"Female",30,"No","Thanks for the fun opportunity.","Yes",".25",1
+29,"English",0,"Female",54,"No.","Thank you and good luck with your research!","Yes",".25",3
+30,"English",1,"Male",43,"No.","","No","$0.25",2
+31,"english",0,"Male",35,"no","","Yes",".30",3
+32,"English",1,"Female",31,"No","Thanks!","Yes","0.25",2
+33,"English",0,"Male",46,"No.","","Yes","0.25",2
+34,"english",1,"Female",35,"no","","Yes",".25",3
+35,"english",1,"Female",41,"no","","Yes",".25",3
+36,"english",0,"Male",35,"no","","Yes",".50",3
+37,"English",0,"Female",35,"","","Yes",".25",3
+38,"English",1,"Female",28,"N/A","Thanks for this great hit!","Confused",".50",3
+39,"English ",0,"Male",26,"n/a","","Yes",".40",3
+40,"English",0,"Male",30,"","","Yes","sure",2
+41,"English",1,"Female",49,"No","","Yes","0.25",3
+42,"english",0,"Female",68,"Didn&quotechart see anything but since you asked I am wondering what I missed!","to see if we could figure out what was wrong, which I couldn&quotechart. The whole hit is just odd","Yes",".25",4
+43,"english",1,"Male",31,"no","","Yes",".25",3
+44,"english",1,"Male",25,"No","","Yes","0.25",2
+45,"English",1,"Female",35,"","","Yes",".25",3
+46,"English",1,"Female",29,"none","","Yes",".25",2
+47,"English",1,"Male",41,"no","","Yes",".25",1
+48,"english",1,"Male",27,"no","","Yes",".40",3
+49,"english",1,"Male",23,"none","","Yes",".25",3
+50,"English",0,"Male",24,"","","Yes",".20",3
+51,"english",1,"Male",29,"","","Yes","",1
+52,"English",1,"Male",34,"No","","Yes","0.25",2
+53,"English",0,"Male",35,"no","none","Yes","yes",3
+54,"English",1,"Male",22,"","","Yes","0.5",2
+55,"English",1,"Male",46,"No","","Yes","0.25",2
+56,"english",0,"Female",39,"no","","Confused",NA,1
+57,"English",1,"Female",31,"Everything worked smoothly, no issues at all.","Thank you very much!","Yes","0.25",2
+58,"English",1,"Female",32,"NO","","Yes","0.5",3
+59,"English",0,"Male",35,"I didn&quotechart notice any bugs.","","Yes","0.25",3
+60,"English",1,"Male",19,"no","N/A","Yes","0.25",2
+61,"English",0,"Male",26,"no","","No","0.25",3
+62,"English",0,"Male",22,"none","none","Yes",NA,2
+63,"english",0,"Female",57,"no","","Yes",".25",4
+64,"English",0,"Male",26,"","","Yes","0.25",3
+65,"English",1,"Male",43,"no","","Yes",".25",2
+66,"english",1,"Female",29,"","","Yes",".20",2
+67,"English",0,"Male",44,"no","","Yes",".35",3
+68,"English",0,"Male",27,"No. ","Thank you. ","Yes",".25",3
+69,"English",1,"Female",57,"none","","Yes","yes",1
+70,"english",0,"Male",31,"no","","Yes","",3
+71,"English",0,"Male",37,"no","","Yes",".25",2
+72,"English",0,"Male",34,"",NA,"Yes",".30",2
+73,"english",1,"Male",27,"no",NA,"Yes",".25",1
+74,"English",1,"Female",49,"no",NA,"Yes","yes",3
+75,"english",0,"Female",43,"",NA,"Yes",".25",2
+76,"English",1,"Female",20,"no",NA,"Yes",".25",2
+77,"german",0,"Female",51,"no",NA,"No","yes",2
+78,"English",1,"Female",32,"",NA,"Yes","0.25",4
+79,"english",0,"Female",35,"no",NA,"Yes",".25",1
+80,"english",1,"Female",38,"no",NA,"Yes","yes",1
+81,"English",0,"Male",40,"no","","Yes",".25",3
+82,"English",1,"Female",29,"None","N/A","Yes",".25",2
+83,"english",0,"Female",30,"No.","","Yes","0.25",2
+84,"English",1,"Male",30,"none","","Yes",".30",3
+85,"English",1,"Female",27,"N/A","","Yes","$.25",3
+86,"English",0,"Male",29,"None","None","Yes",".20",2
+87,"English",1,"Female",62,"no","Hard to agree or disagree with the statement--either way would be somewhat inaccurate!","Yes",".40",4
+88,"English",0,"Female",20,"","Thank you","Confused",".35",2
+89,"English",0,"Male",28,"no","","Yes","50 cents",2

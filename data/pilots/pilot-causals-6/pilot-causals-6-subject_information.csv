@@ -1,0 +1,41 @@
+"workerid","language","enjoyment","gender","age","problems","comments","asses","fairprice","education"
+0,"English",0,"Male",45,"","","Yes","0.3",4
+1,"English",1,"Male",54,"no","","Yes","0.5",3
+2,"English",0,"Male",29,"","","Yes","0.2",0
+3,"English",0,"Male",59,"","","Yes","0.25",2
+4,"english",1,"Male",36,"no","no","Yes","0.25",4
+5,"English",-1,"Male",25,"no","","No","50",2
+6,"",1,"Female",NA,"","","Yes",NA,2
+7,"English",0,"Female",40,"None","","Yes","0.25",3
+8,"Spanish",0,"Female",27,"No","","Yes","0.6",2
+9,"",0,"Female",NA,"","","Yes",".25",-1
+10,"English",1,"Male",28,"No.","","Yes","0.25",3
+11,"english",1,"Male",33,"no","","Yes","yes",3
+12,"English",1,"Male",40,"","I went all 0&quotechars on the survey under the theory that only one unique object would be able to cause it to play music.  ","Yes","50 cents",3
+13,"",0,"Male",27,"","","Yes","",1
+14,"",0,"Male",26,"","","Yes","",2
+15,"",0,"Male",28,"","","Yes","",2
+16,"English",1,"Male",24,"Nothing I noticed.","","Yes","0.25",1
+17,"English",0,"Female",24,"No.","","Yes","0.25",3
+18,"english",1,"Male",34,"none","none","Yes","yes",2
+19,"English",1,"Female",41,"no","","Yes","yes",3
+20,"English",0,"Female",38,"no","","No","0.50",4
+21,"English",0,"Female",48,"","","Yes",".25",3
+22,"english",0,"Female",54,"no","","Yes","0.25",3
+23,"ENGLISH",1,"Female",56,"NO","","Yes",".25",1
+24,"English",0,"Male",62,"no","","Yes","25",3
+25,"English",1,"Male",43,"no","","Yes","0.25",3
+26,"English",1,"Female",30,"","","Yes",".25",3
+27,"english",0,"Male",33,"no","","Yes",".25",3
+28,"English",1,"Male",38,"n","ty","No",".25",3
+29,"englishh",1,"Male",33,"no","","Confused",".50",2
+30,"English",1,"Female",36,"Not that I know of.","Everything was very clear and easy to understand.","Yes",".25",4
+31,"english",1,"Male",24,"no","","Yes","yes",3
+32,"",0,"Male",27,"","","No","",1
+33,"English",1,"Female",50,"","","Yes",".30",2
+34,"English",0,"Male",32,"no","","Yes",".25",3
+35,"english",0,"Male",37,"","","Yes","40cents",2
+36,"English",0,"Male",34,"","","Yes",".32",4
+37,"English",1,"Female",56,"no, it was great","it was great; thanks!","Yes","0.25",2
+38,"English",0,"Male",25,"no","","Yes",".3",3
+39,"English",99,"Female",27,"","","Confused","yes",1
