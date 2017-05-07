@@ -18,22 +18,31 @@ library(ggthemes)
 library(forcats)
 library(knitr)
 theme_set(theme_few())
+
 data.path <- "~/Documents/research/causals/data/pilots/"
 
-readData <- function(filename){
-  return(read.csv(paste(data.path, filename, sep = "")))
+readData <- function(project){
+  return(read.csv(paste(data.path, project, "/", project, "-trials.csv", sep = "")))
+}
+
+readSubjectInfo <- function(project){
+  return(read.csv(paste(data.path, project, "/", project, "-subject_information.csv", sep = "")))
 }
 ```
 
 # Pilot 1
 
 ```{r}
-d.info <- readData("pilot-causals-1-subject_information.csv")
+d.info <- readSubjectInfo("pilot-causals-1")
+
+print(mean(d.info$enjoyment))
+
+table(d.info$enjoyment)
 ```
 
 
 ```{r}
-d <- readData("pilot-causals-1-trials.csv")
+d <- readData("pilot-causals-1")
 ```
 
 ## Time
@@ -184,12 +193,16 @@ d %>%
 # Pilot 2
 
 ```{r}
-d.info <- readData("pilot-causals-2-subject_information.csv")
+d.info <- readSubjectInfo("pilot-causals-2")
+
+print(mean(d.info$enjoyment))
+
+table(d.info$enjoyment)
 ```
 
 
 ```{r}
-d <- readData("pilot-causals-2-trials.csv")
+d <- readData("pilot-causals-2")
 ```
 
 ## Time
@@ -212,16 +225,37 @@ d %>%
   geom_histogram(position = position_dodge())+
   scale_fill_solarized()+
   xlab("seconds")+
-  xlim(0, 200)
+  xlim(0, 150)
 ```
+
+
+
+Time in each condition
+
+```{r fig.width=5}
+d %>%
+  ggplot(., aes(x = rt / 1000, fill = condition))+
+  geom_histogram(position = position_dodge())+
+  scale_fill_solarized()+
+  xlab("seconds")+
+  xlim(0, 150)
+```
+
+
 ## Prior and listener data
 
+How many in each condition
+
+```{r}
+table(d$condition, d$distribution) %>% kable()
+```
+
 ```{r fig.width=8, fig.height = 3}
-df.trials %>%
+d %>%
   filter(condition %in% c("prior", "listener")) %>%
   ggplot(., aes(x = response, fill = condition))+
   #geom_density()+
-  geom_histogram(position = position_dodge())+
+  geom_histogram(position = position_dodge(), bins = 10)+
   facet_grid(.~distribution)+
   scale_fill_grey()+
   scale_x_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1))+
@@ -229,7 +263,7 @@ df.trials %>%
 ```
 
 ```{r}
-df.listener.summary <- df.trials %>%
+df.listener.summary <- d %>%
   filter(condition %in% c("prior", "listener")) %>%
   mutate(distribution = fct_relevel(distribution, "rare", "accidental", "gendered", "female", "prevalent", "biological")) %>%
   group_by(condition, distribution) %>%
@@ -245,15 +279,20 @@ ggplot(df.listener.summary, aes(x = distribution, y = mean, ymin = ci_lower, yma
 
 ## Speaker data
 
-```{r fig.width=8, fig.height = 3}
-df.trials %>%
+```{r}
+with(d %>% filter(condition == 'speaker'), table(distribution, target,frequency)) %>% kable()
+```
+
+
+```{r fig.width=8, fig.height = 4}
+d %>%
   filter(condition == "speaker") %>%
   mutate(frequency = factor(frequency),
          distribution = fct_relevel(distribution, "rare", "accidental", "gendered", "female", "prevalent", "biological")) %>%
   ggplot(., aes(x = response, fill = frequency))+
   #geom_density()+
   geom_histogram(position = position_dodge(), bins = 10)+
-  facet_grid(distribution~frequency)+
+  facet_grid(distribution~target)+
   scale_fill_solarized()+
   scale_x_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1))+
   theme(strip.text.y = element_text(angle = 0))+
@@ -261,7 +300,7 @@ df.trials %>%
 ```
 
 ```{r}
-df.speaker.summary <- df.trials %>%
+df.speaker.summary <- d %>%
   filter(condition == "speaker") %>%
   mutate(distribution = fct_relevel(distribution, "rare", "accidental", "gendered", "female", "prevalent", "biological")) %>%
   group_by(condition, distribution, frequency) %>%
@@ -273,3 +312,289 @@ ggplot(df.speaker.summary, aes(x = frequency, y = mean, ymin = ci_lower, ymax = 
   scale_fill_solarized()+
   ylab("mean agreement with causal")
 ```
+
+
+```{r}
+df.speaker.summary.items <- d %>%
+  filter(condition == "speaker") %>%
+  mutate(distribution = fct_relevel(distribution, "rare", "accidental", "gendered", "female", "prevalent", "biological")) %>%
+  group_by(condition, distribution, target, frequency) %>%
+  multi_boot_standard(column = "response")
+  
+ggplot(df.speaker.summary.items, 
+       aes(x = frequency, y = mean, ymin = ci_lower, ymax = ci_upper, fill = target)) + 
+  geom_bar(stat = 'identity', position = position_dodge(), color = 'black')+
+  geom_errorbar(position = position_dodge())+
+  facet_wrap(~distribution) +
+  scale_fill_solarized()+
+  ylab("mean agreement with causal")
+```
+
+
+# Pilot 3
+
+- One item (chemical compounds making animals *alert*).
+- 3 priors (rare, accidental, prevalent)
+- One target frequency: 20%
+
+n = 90 (~ 30 / prior)
+
+```{r}
+d3.info <- readSubjectInfo("pilot-causals-3")
+
+table(d3.info$enjoyment)
+```
+
+
+```{r}
+d3 <- readData("pilot-causals-3")
+```
+
+Time on trial
+
+```{r}
+d3 %>%
+  ggplot(., aes( x = rt / 1000))+
+  geom_histogram()+
+  xlab("time in seconds")
+```
+
+
+How many participants per distribution
+
+```{r}
+d3 %>%
+  group_by(distribution) %>%
+  summarize(n = n()) %>% kable()
+```
+
+
+```{r}
+d3.summary <- d3 %>%
+  group_by(target, frequency, distribution) %>%
+  multi_boot_standard(column = 'response') %>%
+  mutate(distribution = fct_relevel(distribution, "prevalent", "accidental", "rare"))
+  
+
+ggplot(d3.summary, aes( x = distribution, y = mean, ymin = ci_lower, ymax = ci_upper))+  
+  geom_bar(stat = 'identity', position = position_dodge(0.6), width = 0.6)+
+  geom_errorbar(position = position_dodge(0.6), width = 0.3) + 
+  ylim(0, 1)+
+  ggtitle("makes feps alert (given 20% frequency)")+
+    geom_hline(yintercept = 0.5, lty = 3)
+```
+
+# Pilot 4
+
+- One item (chemical compounds making animals *alert*).
+- 3 priors (rare, accidental, prevalent)
+- One target frequency: 20%
+
+n = 90 (~ 30 / prior)
+
+```{r}
+d4.info <- readSubjectInfo("pilot-causals-4")
+
+table(d4.info$enjoyment)
+```
+
+
+```{r}
+d4 <- readData("pilot-causals-4")
+```
+
+Time on trial
+
+```{r}
+d4 %>%
+  ggplot(., aes( x = rt / 1000))+
+  geom_histogram()+
+  xlab("time in seconds")
+```
+
+
+How many participants per distribution
+
+```{r}
+d4 %>%
+  group_by(distribution) %>%
+  summarize(n = n()) %>% kable()
+```
+
+
+```{r}
+d4.summary <- d4 %>%
+  group_by(target, frequency, distribution) %>%
+  multi_boot_standard(column = 'response') %>%
+  mutate(distribution = fct_relevel(distribution, "prevalent", "accidental", "rare"))
+  
+
+ggplot(d4.summary, aes( x = distribution, y = mean, ymin = ci_lower, ymax = ci_upper))+  
+  geom_bar(stat = 'identity', position = position_dodge(0.6), width = 0.6)+
+  geom_errorbar(position = position_dodge(0.6), width = 0.3) + 
+  ylim(0, 1)+
+  ggtitle("makes feps alert (given 20% frequency)")+
+    geom_hline(yintercept = 0.5, lty = 3)
+```
+
+
+
+# Pilot 5
+
+- Three items (*alert*, *hair turn brown*, *salivate*)
+- 3 priors (rare, accidental, prevalent)
+- One target frequency: 20%
+- 2 conditions (prior predictive and speaker)
+
+
+```{r}
+d5.info <- readSubjectInfo("pilot-causals-5")
+
+table(d5.info$enjoyment)
+```
+
+```{r}
+d5.info %>% select(comments) %>% kable()
+```
+
+```{r}
+d5.info %>% select(problems) %>% kable()
+```
+
+
+```{r}
+d5 <- readData("pilot-causals-5")
+```
+
+How many participants per distribution
+
+```{r}
+d5 %>%
+  group_by(distribution, story, condition) %>%
+  summarize(n = n()) %>% 
+  mutate(n = ifelse(condition == "prior", n / 4, n)) %>%
+  kable()
+```
+
+
+### Prior data
+
+```{r}
+d5.prior <- d5 %>% filter(condition == "prior")
+
+ggplot(d5.prior, aes(x = response))+
+  geom_histogram()+
+  facet_grid(story~distribution, scales = 'free')
+```
+
+```{r}
+d5.prior %>%
+  filter(distribution != "prevalent") %>%
+  group_by(story, distribution) %>%
+  multi_boot_standard(column = "response", na.rm = T) %>% 
+  ggplot(., aes( x = distribution, fill = story, y = mean,
+                 ymin = ci_lower, ymax = ci_upper))+
+  geom_bar(stat = 'identity', position = position_dodge())+
+  geom_errorbar(position = position_dodge())
+```
+
+Probably not enough data to see differences if they were there; but also the items are probably not right.
+
+
+```{r}
+df5.summary <- d5 %>%
+  filter(condition == "speaker") %>%
+  group_by(target, frequency, story, distribution) %>%
+  multi_boot_standard(column = 'response') %>%
+  mutate(distribution = 
+           fct_relevel(distribution, "prevalent", "accidental", "rare"))
+  
+
+ggplot(df5.summary, 
+       aes( x = target, y = mean, ymin = ci_lower, ymax = ci_upper, fill = target))+  
+  geom_bar(stat = 'identity', position = position_dodge(0.6), width = 0.6)+
+  geom_errorbar(position = position_dodge(0.6), width = 0.3) + 
+  ylim(0, 1)+
+  ggtitle("makes it go (given 20% frequency)")+
+  geom_hline(yintercept = 0.5, lty = 3) + 
+  facet_wrap(~distribution)+
+  theme(axis.text.x = element_blank())
+```
+
+Unfortunately not enough data to really see differences. 
+But also, I'm starting to think that the items are not extreme enough.
+
+
+
+
+# Pilot 6: Prior x Domain manipulation
+
+- Two items (*blicket detector*, *metal rusting*)
+- 1 priors (rare)
+- 1 "Evidence level": P sees only results of 3 "experiments"
+
+- 6 sliders
+
+
+```{r}
+d6.info <- readSubjectInfo("pilot-causals-6")
+
+table(d6.info$enjoyment)
+```
+
+```{r}
+d6.info %>% select(comments) %>%
+  filter(comments != "") %>% kable()
+```
+
+```{r}
+d6.info %>% select(problems) %>%  filter(problems != "") %>%kable()
+```
+
+
+```{r}
+d6 <- readData("pilot-causals-6")
+```
+
+Time spent on trial
+
+```{r}
+d6.rt <- unique(d6 %>% select(workerid, rt)) %>%
+  mutate(logrt = log(rt / 1000))
+
+
+d6.rt.stats <- d6.rt %>% 
+  summarize(meanRT = mean(rt / 1000),
+            sdRT = sd(rt / 1000),
+            meanLogRT = mean(logrt),
+            sdLogRT = sd(logrt))
+
+ggplot(d6.rt, aes( x = rt/1000))+
+  geom_histogram()
+
+
+d6.filtered <- d6 %>%
+  filter(rt > 20*1000)
+```
+
+
+How many participants per distribution
+
+```{r}
+d6.filtered %>%
+  group_by(distribution, story, condition) %>%
+  summarize(n = n()) %>% 
+  mutate(n = ifelse(condition == "prior", n / 6, n)) %>%
+  kable()
+```
+
+
+### Prior data
+
+```{r}
+ggplot(d6.filtered, aes(x = response))+
+  geom_histogram()+
+  facet_grid(story~distribution, scales = 'free')+
+  xlim(0, 1)
+```
+
