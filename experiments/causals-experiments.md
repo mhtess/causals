@@ -50,3 +50,35 @@ Same as causals 3, except the table disappears when the participant is presented
 - 2 AFC.
 - Estimated 30 participants / condition --> 90 participants.
 - $0.25 / participant x 90 = (0.25*90) + (0.25*90*0.2) = 27
+
+## Causals 5
+
+Endorsement task and prior task.
+
+Expanding causals 4.
+
++ 2 more items (physical and behavioral)
++ Prior task where participants give 4 ratings on never-before-seen compounds (i.e., predictions)
+
+- 1 trial / participant.
+- 3 item.
+- 2 distributions: {rare, accidental}
+- 2 AFC / 4 x sliders
+- Estimated 20 participants / domain (3) x distribution (2) x condition (2) --> 240 participants.
+- $0.25 / participant x 240 = (0.25*240) + (0.25*240*0.2) = 72
+
+Some errors in deplyoment. Didn't get equal counts in all cells.
+
+## Causals 6
+
+5/6/17
+
+Prior task.
+
++ 2 items: blicket detector and metal rusting.
++ 1 distribution: rare (0s and 10s)
++ only 3 data points from distribution
++ 6 x sliders on predictions
+
+- Estimated 20 participants / 2 x item --> 40 participants.
+- $0.25 / participant x 40 = (0.25*40) + (0.25*40*0.2) = 12
