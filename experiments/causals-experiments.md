@@ -82,3 +82,33 @@ Prior task.
 
 - Estimated 20 participants / 2 x item --> 40 participants.
 - $0.25 / participant x 40 = (0.25*40) + (0.25*40*0.2) = 12
+
+
+## Causals 7
+
+#### Endorsement / interpretation / prior tasks.
+
++ 3 items: Dissolving rocks, growing plants, sleepy animals (but not looking for domain differences)
++ 6 distributions: rare_weak, rare_strong, rare_deterministic, common_weak, common_strong, weak_or_strong
++ 3 frequencies (endorsement only)
+
+#### Unique conditions:
+
+- Prior: 6 distributions
+- Interpretation: 6 distributions
+- Endorsement: 6 distributions x 2 frequencies = 12
+
+Total unique conditions = 24
+
+Pilot N's:
+
+- Prior and interpretation each get n = 15
+- Endorsement get n = 25
+
+- Prior: 6 x 15 = 90
+- Interpretation: 6 x 15 = 90
+- Endorsement: 12 x 25 = 300
+
+Total N = 300 + 90 + 90 = 480
+
+Cost = 480 * 0.25 = 120 + 24 = 144
