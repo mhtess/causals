@@ -102,13 +102,13 @@ Total unique conditions = 24
 
 Pilot N's:
 
-- Prior and interpretation each get n = 15
+- Prior and interpretation each get n = 20
 - Endorsement get n = 25
 
-- Prior: 6 x 15 = 90
-- Interpretation: 6 x 15 = 90
-- Endorsement: 12 x 25 = 300
+- Prior: 6 x 20 = 120 * $0.25 + 20% = $36
+- Interpretation: 6 x 20 = 120 * $0.25 + 20% = $36
+- Endorsement: 12 x 25 = 300 * $0.25 + 20% = $90
 
-Total N = 300 + 90 + 90 = 480
+Total N = 300 + 120 + 120 = 540
 
-Cost = 480 * 0.25 = 120 + 24 = 144
+Cost = 540 * 0.25 = 135 + 27 = 162
