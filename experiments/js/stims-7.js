@@ -130,7 +130,7 @@ var stories = [
   // },
   {
     story: "rocks dissolve",
-    storyline:  "On this planet, there are rocks called CATEGORY and your team of scientists wants to figure out how to make these rocks dissolve into particles. Your team runs experiments trying to make EXEMPLAR dissolve with different chemical compounds.",
+    storyline:  "On this planet, there are rocks called CATEGORY and your team of scientists wants to figure out how to make these rocks dissolve into particles. Your team runs experiments trying to make CATEGORY dissolve with different chemical compounds.",
     experiment: "Your team gave SPECIAL to 100 different CATEGORY.",
     event: "treated",
     experimentResults: "Of those 100 treated, <strong>N</strong> CATEGORY dissolved into particles.",
