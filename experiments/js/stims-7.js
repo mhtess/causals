@@ -135,7 +135,7 @@ var stories = [
     event: "treated",
     experimentResults: "Of those 100 treated, <strong>N</strong> CATEGORY dissolved into particles.",
     lostResults: "The results of this experiment have been misplaced so <strong>we don't know</strong> how many CATEGORY dissolved into particles.",
-    otherExperiments: "your team gave a compound to 100 different EXEMPLAR.",
+    otherExperiments: "your team gave a compound to 100 different CATEGORY.",
     priorQuestion: "<strong>How many CATEGORY do you think will be made to dissolve by each compound</strong>?",
     listenerQuestion: "How many CATEGORY do you think were made to dissolve?",
     treatment: "compound",
