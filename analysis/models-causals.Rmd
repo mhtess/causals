@@ -1,0 +1,214 @@
+---
+title: "Models for causals"
+output: html_notebook
+---
+
+```{r}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+```
+
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(langcog)
+library(ggplot2)
+library(ggthemes)
+library(data.table)
+library(forcats)
+library(knitr)
+theme_set(theme_few())
+
+data.path <- "~/Documents/research/causals/data/pilots/"
+
+readData <- function(project){
+  return(read.csv(paste(data.path, project, "/", project, "-trials.csv", sep = "")))
+}
+
+readSubjectInfo <- function(project){
+  return(read.csv(paste(data.path, project, "/", project, "-subject_information.csv", sep = "")))
+}
+```
+
+
+# Pilot 7 data
+
+```{r}
+d7.prior<- readData("pilot-causals-7-prior")
+d7.endorse <- readData("pilot-causals-7-endorsement")
+d7.int <- readData("pilot-causals-7-interpretation")
+```
+
+### Endorsement data
+
+```{r}
+d7.endorsement.summary <- d7.endorse %>%
+  group_by(distribution, frequency) %>%
+  multi_boot_standard(column = 'response') %>%
+  ungroup() %>%
+  mutate(frequency = factor(frequency, levels = c(20, 60)),
+         distribution = factor(distribution, 
+                               levels = c("rare_weak", "common_weak", "rare_strong",
+                                          "common_strong",
+                                          "rare_deterministic", "weak_or_strong")))
+  
+
+ggplot(d7.endorsement.summary, aes( x = distribution, y = mean, ymin = ci_lower, ymax = ci_upper, fill = frequency, group = frequency))+  
+  geom_bar(stat = 'identity', position = position_dodge(0.6), width = 0.6)+
+  scale_fill_solarized()+
+  geom_errorbar(position = position_dodge(0.6), width = 0.3) + 
+  ylim(0, 1)+
+  ggtitle("causal endorsement")+
+  geom_hline(yintercept = 0.5, lty = 3)+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+
+### Interpretation data
+
+```{r}
+d7.interpretation.summary <- d7.int%>%
+  filter(response > 0.03) %>%
+  group_by(distribution) %>%
+  multi_boot_standard(column = 'response') %>%
+  ungroup() %>%
+  mutate(distribution = factor(distribution, 
+                               levels = c("rare_weak", "common_weak", "rare_strong",
+                                          "common_strong",
+                                          "rare_deterministic", "weak_or_strong")))
+  
+
+ggplot(d7.interpretation.summary, aes( x = distribution, y = mean, ymin = ci_lower, ymax = ci_upper))+  
+  geom_bar(stat = 'identity', position = position_dodge(0.6), width = 0.6)+
+  scale_fill_solarized()+
+  geom_errorbar(position = position_dodge(0.6), width = 0.3) + 
+  ylim(0, 1)+
+  ggtitle("causal interpretation")+
+  geom_hline(yintercept = 0.5, lty = 3)+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+
+# Modeling results
+
+
+```{r}
+m.res <- fread("~/Documents/research/communicating-generalizations/models/causals/results/pilot-results-causals-S1-15000_burn7500_lag50_chain1.csv")
+```
+
+
+## Model parameters
+
+```{r fig.width = 3}
+m.res %>% 
+  filter(type == "param") %>%
+  ggplot(., aes (x = val))+geom_histogram()
+```
+
+
+## Reconstructed priors
+
+```{r fig.height = 4, fig.width = 2}
+m.res %>% 
+  filter(type == "prior", item == "prevalencePrior") %>%
+  ggplot(., aes (x = val))+geom_histogram() + facet_wrap(~dist, ncol = 1)
+```
+
+
+```{r}
+m.res %>% 
+  filter(type == "prior", item != "prevalencePrior") %>%
+  ggplot(., aes (x = val))+geom_histogram() + facet_grid(dist~item+roundedFreq, scales = 'free')+
+  theme(strip.text.y = element_text(angle = 0))
+```
+
+## Posterior predictive -- Endorsement
+
+```{r}
+m.endorse.summary <- m.res %>%
+  filter(type == "predictive", item == "S1") %>%
+  rename(distribution = dist) %>%
+  group_by(distribution, frequency) %>%
+  summarize(MAP = estimate_mode(val), 
+            cred_upper = hdi_upper(val), cred_lower = hdi_lower(val)) %>%
+  ungroup() %>%
+  mutate(frequency = factor(frequency, levels = c(20, 60)),
+         distribution = factor(distribution, 
+                               levels = c("rare_weak", "common_weak", "rare_strong",
+                                          "common_strong",
+                                          "rare_deterministic", "weak_or_strong")))
+
+ggplot(m.endorse.summary, 
+       aes( x = distribution, y = MAP, ymin = cred_lower, ymax = cred_upper, 
+            fill = frequency, group = frequency))+  
+  geom_bar(stat = 'identity', position = position_dodge(0.6), width = 0.6)+
+  scale_fill_solarized()+
+  geom_errorbar(position = position_dodge(0.6), width = 0.3) + 
+  ylim(0, 1)+
+  ggtitle("causal endorsement (model)")+
+  geom_hline(yintercept = 0.5, lty = 3)+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+
+Scatter
+
+```{r}
+md.endorse.summary <- left_join(d7.endorsement.summary, m.endorse.summary)
+
+ggplot(md.endorse.summary, aes( x = MAP, xmin = cred_lower, xmax = cred_upper,
+                                y = mean, ymin = ci_lower, ymax = ci_upper,
+                                color = distribution, shape = frequency))+
+  geom_abline(intercept = 0, slope = 1, lty = 3)+
+  geom_point(size = 2)+
+  geom_errorbar(alpha=0.3)+ geom_errorbarh(alpha=0.3)+
+  scale_color_solarized()+
+  xlim(0,1)+ylim(0,1)+coord_fixed()+
+  xlab("S1 model causal endorsement")+
+  ylab("Human Proportion Causal Endorsement")
+```
+
+
+## Posterior predictive -- Endorsement
+
+```{r}
+m.int.summary <- m.res %>%
+  filter(type == "predictive", item == "L0") %>%
+  rename(distribution = dist) %>%
+  group_by(distribution) %>%
+  summarize(MAP = estimate_mode(val), 
+            cred_upper = hdi_upper(val), cred_lower = hdi_lower(val)) %>%
+  ungroup() %>%
+  mutate(distribution = factor(distribution, 
+                               levels = c("rare_weak", "common_weak", "rare_strong",
+                                          "common_strong",
+                                          "rare_deterministic", "weak_or_strong")))
+
+ggplot(m.int.summary, 
+       aes( x = distribution, y = MAP, ymin = cred_lower, ymax = cred_upper))+  
+  geom_bar(stat = 'identity', position = position_dodge(0.6), width = 0.6)+
+  scale_fill_solarized()+
+  geom_errorbar(position = position_dodge(0.6), width = 0.3) + 
+  ylim(0, 1)+
+  ggtitle("causal interpretation (model)")+
+  geom_hline(yintercept = 0.5, lty = 3)+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+
+Scatter
+
+```{r}
+md.int.summary <- left_join(d7.interpretation.summary, m.int.summary)
+
+ggplot(md.int.summary, aes( x = MAP, xmin = cred_lower, xmax = cred_upper,
+                                y = mean, ymin = ci_lower, ymax = ci_upper,
+                                color = distribution))+
+  geom_abline(intercept = 0, slope = 1, lty = 3)+
+  geom_point(size = 2)+
+  geom_errorbar(alpha=0.3)+ geom_errorbarh(alpha=0.3)+
+  scale_color_solarized()+
+  xlim(0,1)+ylim(0,1)+coord_fixed()+
+  xlab("L0 model causal interpretation")+
+  ylab("Human Causal Judgment")
+```
