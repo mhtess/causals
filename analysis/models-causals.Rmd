@@ -8,7 +8,7 @@ knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
 ```
 
 
-```{r}
+```{r helpers}
 library(dplyr)
 library(tidyr)
 library(langcog)
@@ -17,6 +17,14 @@ library(ggthemes)
 library(data.table)
 library(forcats)
 library(knitr)
+
+shape_alpha <- function(g, d){
+  return (g*d)
+}
+shape_beta <- function(g, d){
+  return ((1-g)*d)
+}
+
 theme_set(theme_few())
 
 data.path <- "~/Documents/research/causals/data/pilots/"
@@ -109,11 +117,59 @@ m.res %>%
 ## Reconstructed priors
 
 ```{r fig.height = 4, fig.width = 2}
-m.res %>% 
-  filter(type == "prior", item == "prevalencePrior") %>%
-  ggplot(., aes (x = val))+geom_histogram() + facet_wrap(~dist, ncol = 1)
+m.res.i<-m.res %>%
+  filter(type == "prior") %>%
+  mutate(item = paste(type, item, dist,roundedFreq, sep = "-")) %>%
+  select(-type, -dist, -roundedFreq, -frequency) %>%
+  group_by(item) %>%
+  mutate(iteration = ave(item == item, item, FUN = cumsum)) %>%
+  ungroup() %>%
+  separate(item, 
+           into = c("type", "item", "dist", "roundedFreq"), sep = "-") %>%
+  mutate(item = paste(item, roundedFreq, sep = "_")) %>%
+  select(-roundedFreq) %>%
+  spread(item, val) %>%
+  rowwise() %>%
+  mutate(isPresent = rbinom(1,1,isPresent_NA),
+         a = shape_alpha(prevalenceGivenPresent_mean,
+                         prevalenceGivenPresent_sampleSize),
+         b = shape_beta(prevalenceGivenPresent_mean,
+                        prevalenceGivenPresent_sampleSize),
+         prevWhenPresent = rbeta(1,a,b),
+         posteriorPredictivePrevalence = 
+           ifelse(isPresent == 0, 0, prevWhenPresent))
+
+
+
+m.res.i %>% 
+  filter(type == "prior") %>%
+  ggplot(., aes (x = posteriorPredictivePrevalence))+geom_histogram() + facet_wrap(~dist, ncol = 1)
 ```
 
+
+#### Compare Model-Data CDFs
+
+```{r}
+bind_rows(
+    m.res.i %>%
+    mutate(src = 'model') %>%
+    select(dist, posteriorPredictivePrevalence, src) %>%
+    rename(distribution = dist,
+           response = posteriorPredictivePrevalence),
+  d7.prior %>%
+    select(distribution, response) %>%
+    mutate(src = 'data')
+) %>% ggplot(., aes( x =response, color = src))+
+  stat_ecdf()+
+  facet_wrap(~distribution)+
+  scale_color_solarized()+
+ scale_x_continuous(limits = c(0,1), breaks = c(0, 0.5, 1)) +
+  scale_y_continuous(limits = c(0,1), breaks = c(0, 0.5, 1)) +
+  theme(strip.text.y = element_text(angle = 0))
+```
+
+
+#### Prior parameters
 
 ```{r}
 m.res %>% 
