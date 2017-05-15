@@ -117,8 +117,9 @@ Cost = 540 * 0.25 = 135 + 27 = 162
 
 Endorsement task.
 
-- Prior: 2 distributions (rare vs. accidental)
+- Prior: 4 distributions (rare vs. common X weak vs. deterministic)
+- Add catch trial at end
 - Make distributions more random looking (no round numbers)
 - n = 50 / distribution
 
-Cost = 100 * 0.25 = 25 + 5 = 30
+Cost = 200 * 0.25 = 50 + 10 = 60

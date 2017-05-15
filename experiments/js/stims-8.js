@@ -37,6 +37,7 @@ var strong = gaussian(80, 5);
 
 var rare_weak_samples = [], common_weak_samples = [];
 var rare_strong_samples = [], common_strong_samples = [];
+var rare_deterministic_samples = [], common_deterministic_samples = [];
 
 // rare weak distribution
 for (var i=0; i<10; i++){
@@ -53,6 +54,20 @@ for (var i=0; i<10; i++){
   var s = weak.ppf(Math.random())
   common_weak_samples.push(Math.round(s));
 }
+
+
+// common determinsitic
+for (var i=0; i<10; i++){
+  common_deterministic_samples.push(sampleDeterministic());
+}
+for (var i=0; i<10; i++){
+  if (i < rarity) {
+    rare_deterministic_samples.push(sampleDeterministic());
+  } else {
+    rare_deterministic_samples.push(sampleNull());
+  }
+}
+
 
 // console.log(rare_weak_samples)
 
@@ -73,14 +88,14 @@ var distributions = [
   //   distribution: "common_strong",
   //   data: [75, 65, 65, 75, 80, 90, 80, 75, 80, 90]
   // },
-  // {
-  //   distribution: "rare_deterministic",
-  //   data: [0, 0, 100, 100, 0, 0, 100, 0, 0, 100, 0]
-  // },
-  // {
-  //   distribution: "common_deterministic",
-  //   data: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
-  // },
+  {
+    distribution: "rare_deterministic",
+    data: _.shuffle(rare_deterministic_samples)
+  },
+  {
+    distribution: "common_deterministic",
+    data: _.shuffle(common_deterministic_samples)
+  },
   // {
   //   distribution: "weak_or_strong",
   //   data: [85, 75, 15, 75, 10, 90, 90, 80, 10, 20]
