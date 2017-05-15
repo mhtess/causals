@@ -112,3 +112,13 @@ Pilot N's:
 Total N = 300 + 120 + 120 = 540
 
 Cost = 540 * 0.25 = 135 + 27 = 162
+
+## Causals 8
+
+Endorsement task.
+
+- Prior: 2 distributions (rare vs. accidental)
+- Make distributions more random looking (no round numbers)
+- n = 50 / distribution
+
+Cost = 100 * 0.25 = 25 + 5 = 30
