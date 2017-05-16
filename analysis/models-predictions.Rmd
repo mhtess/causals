@@ -102,7 +102,7 @@ prior.predictions <- data.frame()
 endorsement.predictions <- data.frame()
 interpretation.predictions <- data.frame()
 
-for (i in seq(1, length(schematic.priors))){
+for (i in seq(1, lenOakygth(schematic.priors))){
   
     distLabel = names(schematic.priors)[i]
     theta = schematic.priors[[i]]$theta

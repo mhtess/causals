@@ -25,6 +25,11 @@ readData <- function(project){
   return(read.csv(paste(data.path, project, "/", project, "-trials.csv", sep = "")))
 }
 
+readCatchTrials <- function(project){
+  return(read.csv(paste(data.path, project, "/", project, "-catch_trials.csv", sep = "")))
+}
+
+
 readSubjectInfo <- function(project){
   return(read.csv(paste(data.path, project, "/", project, "-subject_information.csv", sep = "")))
 }
@@ -70,13 +75,25 @@ d %>%
 
 ## Prior questions
 
+```{r}
+d %>%
+  group_by(query, distribution) %>%
+  summarize(n = n()) %>%
+  kable()
+```
+
+
+
 ```{r fig.width=5.0, fig.height = 6}
 d %>% 
   select(story, target, distribution, starts_with("prior")) %>%
   gather(key, val, starts_with("prior")) %>%
   separate(key, into = c("key", "question")) %>%
   mutate(question = fct_relevel(question, "probabilityOfPresent"),
-         distribution = fct_relevel(distribution, "rare", "accidental", "gendered", "female", "prevalent", "biological")) %>%
+         distribution = fct_relevel(distribution, 
+                                    "rare", "accidental", 
+                                    "gendered", "female", 
+                                    "prevalent", "biological")) %>%
   ggplot(., aes( x = val, fill = distribution))+
   geom_histogram()+
   facet_grid(distribution~question)+
@@ -84,6 +101,27 @@ d %>%
   scale_fill_solarized()+
   guides(fill = F)
 ```
+
+Domain differences in extendability?
+```{r}
+d %>% 
+  select(story, target, distribution, starts_with("prior")) %>%
+  gather(key, val, starts_with("prior")) %>%
+  separate(key, into = c("key", "question")) %>%
+  mutate(question = fct_relevel(question, "probabilityOfPresent"),
+         distribution = fct_relevel(distribution, 
+                                    "rare", "accidental", 
+                                    "gendered", "female", 
+                                    "prevalent", "biological")) %>%
+  filter(question == "prevalenceGivenPresent") %>%
+  ggplot(., aes( x = val, fill = distribution))+
+  geom_histogram()+
+  facet_grid(distribution~story)+
+  theme(strip.text.y = element_text(angle = 0))+
+  scale_fill_solarized()+
+  guides(fill = F)
+```
+
 
 ## Listener data
 
@@ -202,7 +240,7 @@ table(d.info$enjoyment)
 
 
 ```{r}
-d <- readData("pilot-causals-2")
+d2 <- readData("pilot-causals-2")
 ```
 
 ## Time
@@ -210,7 +248,7 @@ d <- readData("pilot-causals-2")
 Total time spent on experiment
 
 ```{r fig.width=5}
-d %>% 
+d2 %>% 
   group_by(workerid) %>% 
   summarize(totalMin = sum(rt/1000/60)) %>%
   ggplot(., aes(x = totalMin))+
@@ -220,7 +258,7 @@ d %>%
 Time on each trial (first trial in red)
 
 ```{r fig.width=5}
-d %>%
+d2 %>%
   ggplot(., aes(x = rt / 1000, fill = trial_num == 0))+
   geom_histogram(position = position_dodge())+
   scale_fill_solarized()+
@@ -233,7 +271,7 @@ d %>%
 Time in each condition
 
 ```{r fig.width=5}
-d %>%
+d2 %>%
   ggplot(., aes(x = rt / 1000, fill = condition))+
   geom_histogram(position = position_dodge())+
   scale_fill_solarized()+
@@ -247,8 +285,15 @@ d %>%
 How many in each condition
 
 ```{r}
-table(d$condition, d$distribution) %>% kable()
+table(d2$condition, d2$distribution) %>% kable()
 ```
+Prior condition assignments
+
+```{r}
+with(d2 %>% filter(condition == "prior"),
+  table(target, distribution)) %>% kable()
+```
+
 
 ```{r fig.width=8, fig.height = 3}
 d %>%
@@ -524,9 +569,6 @@ ggplot(df5.summary,
 Unfortunately not enough data to really see differences. 
 But also, I'm starting to think that the items are not extreme enough.
 
-
-
-
 # Pilot 6: Prior x Domain manipulation
 
 - Two items (*blicket detector*, *metal rusting*)
@@ -597,4 +639,452 @@ ggplot(d6.filtered, aes(x = response))+
   facet_grid(story~distribution, scales = 'free')+
   xlim(0, 1)
 ```
+
+# Pilot 7
+
+## Endorsement Pilot -- 6 Priors x 2 Frequency 
+
+- Three items (though not enough power to see item differences)
+- 6 priors: 
+- 2 target frequencies
+
+
+```{r}
+d7.info <- readSubjectInfo("pilot-causals-7-endorsement")
+
+table(d7.info$enjoyment)
+```
+
+```{r}
+d7.info %>% select(comments) %>%
+  filter(comments != "") %>% kable()
+```
+
+```{r}
+d6.info %>% select(problems) %>%  filter(problems != "") %>%kable()
+```
+
+
+```{r}
+d7 <- readData("pilot-causals-7-endorsement")
+```
+
+Time spent on trial
+
+```{r}
+d7.rt <- unique(d7 %>% select(workerid, rt)) %>%
+  mutate(logrt = log(rt / 1000))
+
+
+d7.rt.stats <- d7.rt %>% 
+  summarize(meanRT = mean(rt / 1000),
+            sdRT = sd(rt / 1000),
+            meanLogRT = mean(logrt),
+            sdLogRT = sd(logrt))
+
+ggplot(d7.rt, aes( x = rt/1000))+
+  geom_histogram()
+
+```
+
+
+How many participants per distribution
+
+```{r}
+d7 %>%
+  group_by(frequency, distribution) %>%
+  summarize(n = n()) %>% 
+  kable()
+```
+
+
+### Endorsement data
+
+```{r}
+d7.summary <- d7 %>%
+  group_by(distribution, frequency) %>%
+  multi_boot_standard(column = 'response') %>%
+  ungroup() %>%
+  mutate(frequency = factor(frequency, levels = c(20, 60)),
+         distribution = factor(distribution, levels = c("rare_weak", "common_weak", "rare_strong", "common_strong",
+                                                        "rare_deterministic", "weak_or_strong")))
+  
+
+ggplot(d7.summary, aes( x = distribution, y = mean, ymin = ci_lower, ymax = ci_upper, fill = frequency, group = frequency))+  
+  geom_bar(stat = 'identity', position = position_dodge(0.6), width = 0.6)+
+  scale_fill_solarized()+
+  geom_errorbar(position = position_dodge(0.6), width = 0.3) + 
+  ylim(0, 1)+
+  ggtitle("causal endorsement")+
+  geom_hline(yintercept = 0.5, lty = 3)+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+### Explore domain or prior effects, independently
+
+
+#### Domain x frequency effects (collapsing across distribution)
+
+How many participants per domain x distribution x frequency
+
+```{r}
+d7 %>%
+  group_by(frequency, story) %>%
+  summarize(n = n()) %>% 
+  kable()
+```
+
+```{r}
+d7.summary.item.collapseDist <- d7 %>%
+  group_by(story, frequency) %>%
+  multi_boot_standard(column = 'response') %>%
+  ungroup() %>%
+  mutate(frequency = factor(frequency, levels = c(20, 60)))
+  
+
+ggplot(d7.summary.item.collapseDist, aes( x = story, y = mean, ymin = ci_lower, ymax = ci_upper, fill = frequency, group = frequency))+  
+  geom_bar(stat = 'identity', position = position_dodge(0.6), width = 0.6)+
+  scale_fill_solarized()+
+  geom_errorbar(position = position_dodge(0.6), width = 0.3) + 
+  ylim(0, 1)+
+  ggtitle("causal endorsement")+
+  geom_hline(yintercept = 0.5, lty = 3)+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+
+#### Distribution effects (collapsing across frequencies / domains)
+
+
+How many participants per domain x distribution x frequency
+
+```{r}
+d7 %>%
+  group_by(distribution) %>%
+  summarize(n = n()) %>% 
+  kable()
+```
+
+
+```{r}
+d7.summary.dist.collapseFreqItem <- d7 %>%
+  group_by(distribution) %>%
+  multi_boot_standard(column = 'response') %>%
+  ungroup() %>%
+  mutate(distribution = factor(distribution, 
+                               levels = c("rare_weak", "common_weak", "rare_strong", "common_strong",
+                                                        "rare_deterministic", "weak_or_strong")))  
+
+
+ggplot(d7.summary.dist.collapseFreqItem, 
+       aes( x = distribution, y = mean, ymin = ci_lower, ymax = ci_upper))+  
+  geom_bar(stat = 'identity', position = position_dodge(0.6), width = 0.6)+
+  scale_fill_solarized()+
+  geom_errorbar(position = position_dodge(0.6), width = 0.3) + 
+  ylim(0, 1)+
+  ggtitle("causal endorsement")+
+  geom_hline(yintercept = 0.5, lty = 3)+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+
+#### Domain x distribution effects
+
+
+How many participants per domain x distribution
+
+```{r}
+d7 %>%
+  group_by(distribution, story) %>%
+  summarize(n = n()) %>% 
+  kable()
+```
+
+
+Though the data is few, I will examine by-item
+
+```{r fig.height = 3}
+d7.summary.item <- d7 %>%
+  group_by(distribution, story) %>%
+  multi_boot_standard(column = 'response') %>%
+  ungroup() %>%
+  mutate(distribution = factor(distribution, 
+                               levels = c("rare_weak", 
+                                          "common_weak",
+                                          "rare_strong",
+                                          "common_strong",
+                                          "rare_deterministic",
+                                          "weak_or_strong")))
+  
+
+ggplot(d7.summary.item, aes( x = distribution, y = mean, ymin = ci_lower, ymax = ci_upper, fill = story, group = story))+  
+  geom_bar(stat = 'identity', position = position_dodge(0.6), width = 0.6)+
+  scale_fill_solarized()+
+  geom_errorbar(position = position_dodge(0.6), width = 0.3) + 
+  ylim(0, 1)+
+  ggtitle("causal endorsement")+
+  geom_hline(yintercept = 0.5, lty = 3)+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+
+## Distribution by frequency (filtering out "rocks")
+
+
+How many participants per distribution
+
+```{r}
+d7 %>%
+  filter(story != "rocks dissolve") %>%
+  group_by(frequency, distribution) %>%
+  summarize(n = n()) %>% 
+  kable()
+```
+
+```{r}
+d7.summary.norocks <- d7 %>%
+  filter(story != "rocks dissolve") %>%
+  group_by(distribution, frequency) %>%
+  multi_boot_standard(column = 'response') %>%
+  ungroup() %>%
+  mutate(frequency = factor(frequency, levels = c(20, 60)),
+         distribution = factor(distribution, levels = c("rare_weak", "common_weak", "rare_strong", "common_strong",
+                                                        "rare_deterministic", "weak_or_strong")))
+  
+
+ggplot(d7.summary.norocks, aes( x = distribution, y = mean, ymin = ci_lower, ymax = ci_upper, fill = frequency, group = frequency))+  
+  geom_bar(stat = 'identity', position = position_dodge(0.6), width = 0.6)+
+  scale_fill_solarized()+
+  geom_errorbar(position = position_dodge(0.6), width = 0.3) + 
+  ylim(0, 1)+
+  ggtitle("causal endorsement")+
+  geom_hline(yintercept = 0.5, lty = 3)+
+  theme(axis.text.x = element_text(angle = 90))
+```
+## Prior
+
+```{r}
+d7.info <- readSubjectInfo("pilot-causals-7-prior")
+
+table(d7.info$enjoyment)
+```
+
+```{r}
+d7.info %>% select(comments) %>%
+  filter(comments != "") %>% kable()
+```
+
+```{r}
+d7.info %>% select(problems) %>%  filter(problems != "") %>%kable()
+```
+
+
+```{r}
+d7 <- readData("pilot-causals-7-prior")
+```
+
+Time spent on trial
+
+```{r}
+d7.rt <- unique(d7 %>% select(workerid, rt)) %>%
+  mutate(logrt = log(rt / 1000))
+
+
+d7.rt.stats <- d7.rt %>% 
+  summarize(meanRT = mean(rt / 1000),
+            sdRT = sd(rt / 1000),
+            meanLogRT = mean(logrt),
+            sdLogRT = sd(logrt))
+
+ggplot(d7.rt, aes( x = rt/1000))+
+  geom_histogram()
+
+
+d7.filtered <- d7 %>%
+  filter(rt > 20*1000)
+```
+
+
+How many participants per distribution
+
+```{r}
+d7 %>%
+  group_by(distribution, condition) %>%
+  summarize(n = n()) %>% 
+  mutate(n = ifelse(condition == "prior", n / 5, n)) %>%
+  kable()
+```
+
+
+### Prior data
+
+```{r fig.width = 4, fig.height = 5}
+ggplot(d7, aes(x = response))+
+  geom_histogram(aes(y=(..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..])) + 
+  facet_grid(distribution~., scales = 'free')+
+  theme(strip.text.y = element_text(angle = 0))+ ylab("proportion")
+  
+```
+
+```{r}
+ggplot(d7, aes(x = response))+
+  geom_histogram(aes(y=(..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..])) + 
+  facet_grid(story~., scales = 'free')+
+  theme(strip.text.y = element_text(angle = 0))+ ylab("proportion")
+```
+
+```{r}
+ggplot(d7, aes(x = response))+
+  geom_histogram()+
+  facet_grid(story~distribution, scales = 'free')+
+  theme(strip.text.y = element_text(angle = 0))
+```
+
+```{r}
+d7 %>% filter(distribution == "rare_deterministic") %>% View()
+```
+
+## Interpretation
+
+```{r}
+d7.int.info <- readSubjectInfo("pilot-causals-7-interpretation")
+
+table(d7.int.info$enjoyment)
+```
+
+```{r}
+d7.int.info %>% select(comments) %>%
+  filter(comments != "") %>% kable()
+```
+
+```{r}
+d7.int.info %>% select(problems) %>%  filter(problems != "") %>%kable()
+```
+
+
+```{r}
+d7.int <- readData("pilot-causals-7-interpretation")
+```
+
+Time spent on trial
+
+```{r}
+d7.int.rt <- unique(d7.int %>% select(workerid, rt)) %>%
+  mutate(logrt = log(rt / 1000))
+
+
+d7.int.rt.stats <- d7.int.rt %>% 
+  summarize(meanRT = mean(rt / 1000),
+            sdRT = sd(rt / 1000),
+            meanLogRT = mean(logrt),
+            sdLogRT = sd(logrt))
+
+ggplot(d7.int.rt, aes( x = rt/1000))+
+  geom_histogram()
+
+
+d7.filtered <- d7 %>%
+  filter(rt > 20*1000)
+```
+
+
+How many participants per distribution
+
+```{r}
+d7.int %>%
+  group_by(distribution, condition) %>%
+  summarize(n = n()) %>% 
+  mutate(n = ifelse(condition == "prior", n / 5, n)) %>%
+  kable()
+```
+
+
+### Interpretation data
+
+```{r}
+ggplot(d7.int, aes(x = response))+
+  #geom_histogram(aes(y=(..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..])) + 
+  geom_histogram(bins=100)+
+  theme(strip.text.y = element_text(angle = 0))
+```
+
+
+```{r fig.width = 4, fig.height = 5}
+ggplot(d7.int, aes(x = response))+
+  #geom_histogram(aes(y=(..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..])) + 
+  geom_histogram()+
+  facet_grid(distribution~., scales = 'free')+
+  theme(strip.text.y = element_text(angle = 0))+
+  ylab("proportion")
+  
+```
+
+# Pilot 8
+
+Endorsement Pilot -- 4 Prior
+
+- Prior: 4 distributions (rare vs. common X weak vs. deterministic)
+- Add catch trial at end
+- Make distributions more random looking (no round numbers)
+- n = 50 / distribution
+- 20% target frequency
+
+```{r}
+d8.info <- readSubjectInfo("pilot-causals-8")
+
+table(d8.info$enjoyment)
+```
+
+
+```{r}
+d8.info %>% select(comments) %>%
+  filter(comments != "") %>% kable()
+```
+
+```{r}
+d8.info %>% select(problems) %>%  filter(problems != "") %>%kable()
+```
+
+```{r}
+d8.catch <- readCatchTrials("pilot-causals-8")
+
+d8.catch <- d8.catch %>% mutate(passBoth = ifelse(pass_numeric + pass_story == 2, 1, 0))
+  
+sum(d8.catch$passBoth)
+```
+
+```{r}
+d8 <- left_join(readData("pilot-causals-8"), d8.catch %>% select(workerid, passBoth))
+```
+
+
+```{r}
+
+d8.filtered <- d8 %>% filter(passBoth == 1)
+
+d8.filtered %>%
+  group_by(distribution) %>%
+  summarize(n = n()) %>% kable()
+```
+
+```{r fig.width = 6}
+d8.summary <- d8.filtered %>%
+  group_by(distribution, frequency) %>%
+  multi_boot_standard(column = "response") %>%
+  ungroup()
+
+
+ggplot(d8.summary, aes( x = factor(frequency), y = mean, ymin = ci_lower, ymax = ci_upper, fill = distribution,
+                        group = distribution))+
+  geom_bar(stat='identity', position = position_dodge(), width = 0.3, color = 'black')+
+  geom_errorbar(width = 0.2, position = position_dodge(0.3))+
+  theme(axis.text.x = element_text(angle = 90))+
+  geom_hline(yintercept = 0.5, lty = 3)+
+  scale_y_continuous(limits = c(0, 1), breaks = c(0,0.5, 1))+
+  scale_fill_solarized()+
+  xlab("Frequency")+
+  ylab("Proportion Causal Endorsement")
+```
+
+
 
