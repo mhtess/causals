@@ -1,0 +1,209 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library(rwebppl)
+```
+
+```{r}
+
+#m.res <- fread("~/Documents/research/communicating-generalizations/models/causals/results/pilot-results-causals-S1-50000_burn25000_lag50_chain1.csv")
+m.res <- fread("~/Documents/research/communicating-generalizations/models/causals/results/pilot-results-causals-filteredRareWeakPrior-S1-50000_burn25000_lag10_chain1.csv")
+
+priors.summary <- m.res %>% 
+  filter(type == "prior", item != "prevalencePrior") %>%
+  group_by(dist, item, roundedFreq) %>%
+  summarize(MAP = estimate_mode(val), 
+            cred_upper = hdi_upper(val), cred_lower = hdi_lower(val)) %>%
+  ungroup() %>%
+  mutate(param = paste(item, roundedFreq, sep = "_")) %>%
+  select(-item, -roundedFreq, -cred_upper, -cred_lower) %>%
+  spread(param,MAP)
+```
+
+
+
+```{r}
+rsa <- '
+var utterancePrior = Infer({model: function(){
+	return uniformDraw(["causal","silence"])
+}});
+
+var meaning = function(utt,state, theta) {
+  return utt=="causal"? state > theta :
+         utt=="causal is false"? state<=theta :
+         utt=="silence"? true :
+         utt=="some"? state > 0 :
+         true
+}
+
+var nullParams = {a:1, b:100}, nullDistribution = Beta(nullParams);
+// var betaParams = {g: 0.18, d: 5.6}
+var theta = data.theta[0];
+var speakerOptimality = {s1: 1};
+var priorParams = betaShape(data.betaShape[0]);
+
+//var priorParams = {a:6, b: 2.5}
+
+var statePrior = Infer({model: function(){
+  sample(
+    flip(theta) ? DiscretizedBeta(priorParams) : DiscretizedBeta(nullParams)
+)}});
+
+/// RSA model
+var listener0 = cache(function(utterance) {
+  Infer({model: function(){
+    var state = sample(statePrior), theta = sample(thetaPrior);
+    var m = meaning(utterance, state, theta)
+    condition(m)
+    return state
+ }})}, 10000)
+
+var speaker1 = cache(function(freq) {
+  Infer({model: function(){
+    var utterance = sample(utterancePrior);
+    var L0 = listener0(utterance);
+    factor(speakerOptimality.s1 * L0.score(freq))
+    return utterance === "causal" ? 1 : 0
+}})}, 10000)
+
+
+//listener0("causal")
+var distToObj = function(dist){
+return map(function(s){return [s, Math.exp(dist.score(s))] },dist.support())
+}
+
+var res = {
+prior: distToObj(statePrior),
+l0: distToObj(listener0("causal")),
+s1: map(function(freq){return [freq, expectation(speaker1(utils.closest(midBins, freq)))]},
+    _.range(0, 1.1,0.2))
+}
+
+res
+'
+
+```
+
+```{r}
+schematic.priors <- list(
+  "rare_weak" = list(betaShape = data.frame(g = 0.2, d = 5), theta = 0.3),
+  "rare_strong" = list(betaShape = data.frame(g = 0.8, d = 5), theta = 0.3),
+  "common_weak" = list(betaShape = data.frame(g = 0.2, d = 5), theta = 1),
+  "common_strong" = list(betaShape = data.frame(g = 0.8, d = 5), theta = 1),
+  "rare_deterministic" = list(betaShape = data.frame(g = 0.99, d = 5), theta = 0.3),
+  "common_deterministic" = list(betaShape = data.frame(g = 0.99, d = 5), theta = 1)
+)
+
+prior.predictions <- data.frame()
+endorsement.predictions <- data.frame()
+interpretation.predictions <- data.frame()
+
+for (i in seq(1, length(schematic.priors))){
+  
+    distLabel = names(schematic.priors)[i]
+    theta = schematic.priors[[i]]$theta
+    betaShape = data.frame(schematic.priors[[i]]$betaShape)
+    
+    rs <- webppl(program_code = rsa,
+          packages = c("~/Documents/research/communicating-generalizations/models/causals/node_modules/utils/"),
+          data = list(theta = theta, betaShape = betaShape, speakerFreq = j),
+          data_var = "data"
+        )
+    
+    interpretation.predictions <- bind_rows(
+      interpretation.predictions,
+      data.frame(rs$l0) %>% mutate(dist = distLabel)
+      )
+    
+    
+    prior.predictions <- bind_rows(
+      prior.predictions,
+      data.frame(rs$prior) %>% mutate(dist = distLabel)
+      )
+    
+    endorsement.predictions <-  bind_rows(
+      endorsement.predictions,
+      data.frame(rs$s1) %>% mutate(dist = distLabel)
+      )
+    
+  print(distLabel)
+}
+
+```
+
+
+# Priors
+
+```{r}
+ggplot(prior.predictions, aes( x = X1, y = X2))+
+  geom_line()+
+  facet_wrap(~dist)
+```
+
+# Interpretation
+
+```{r}
+ggplot(interpretation.predictions, aes( x = X1, y = X2))+
+  geom_line()+
+  facet_wrap(~dist)
+```
+
+# Endorsement
+
+```{r}
+ggplot(endorsement.predictions %>% separate(dist, 
+                  into = c("theta", "mean")), aes( x = X1, y = X2, color = theta))+
+  geom_line()+
+  facet_wrap(~mean)
+```
+
+```{r}
+ggplot(schematic.predictions %>% 
+         separate(dist, 
+                  into = c("theta", "mean")) %>%
+         filter(mean != "strong"), 
+       aes ( x = freq, y = prob, color = theta, shape = mean ) ) +
+  geom_point(size = 3)+
+  scale_color_solarized()
+```
+
+```{r}
+frequencies = c(0.2, 0.4, 0.6, 0.8)
+
+model.predictions <- data.frame()
+for (i in seq(1, length(priors.summary$dist))){
+  
+  for (j in frequencies){
+    theta = priors.summary[[i,"isPresent_NA"]]
+    betaShape = data.frame(
+      g = priors.summary[[i,"prevalenceGivenPresent_mean"]],
+      d = priors.summary[[i,"prevalenceGivenPresent_sampleSize"]]
+      )
+    
+    model.predictions <- bind_rows(
+      model.predictions,
+      data.frame(
+        dist = priors.summary[[i, "dist"]],
+        webppl(program_code = rsa,
+          packages = c("~/Documents/research/communicating-generalizations/models/causals/node_modules/utils/"),
+          data = list(theta = theta, betaShape = betaShape, speakerFreq = j),
+          data_var = "data"
+        ) )
+      )
+    
+      
+  }
+  print(priors.summary[[i, "dist"]])
+}
+
+```
+
+```{r}
+ggplot(model.predictions, aes ( x = freq, y = prob, color = dist ) ) +
+  geom_point()
+```
+
