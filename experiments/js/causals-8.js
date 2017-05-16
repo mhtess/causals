@@ -43,13 +43,18 @@ function make_slides(f) {
      },
      button : function() {
        var response = $("#catch").val()
-       if (response == 99) {
+       var numericResponse = parseInt($("#resultRetrieval").val())
+       if ( (response == 99) || numericResponse == "") {
          $(".err").show();
        } else {
+         var passStory = (response == exp.stimscopy[0].story) ?  1 : 0;
+         var passNumeric = exp.stimscopy[0].data.indexOf(numericResponse) != -1 ? 1 : 0;
          exp.catch_trials.push({
-           response: response,
-           actual: exp.stimscopy[0].story,
-           pass: (response == exp.stimscopy[0].story) ?  1 : 0
+           response_story: response,
+           actual_story: exp.stimscopy[0].story,
+           response_data: numericResponse,
+           pass_story: passStory,
+           pass_numeric: passNumeric
          })
          exp.go();
        }
@@ -452,7 +457,7 @@ function init() {
 
   repeatWorker = false;
   (function(){
-      var ut_id = "mht-causals-20170508";
+      var ut_id = "mht-causals-20170516";
       if (UTWorkerLimitReached(ut_id)) {
         $('.slide').empty();
         repeatWorker = true;
@@ -557,7 +562,6 @@ function init() {
   //blocks of the experiment:
    exp.structure=[
      "i0",
-    //  "instructions",
      "prior_elicitation",
      "debrief",
      "subj_info",
