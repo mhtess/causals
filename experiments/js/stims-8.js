@@ -2,7 +2,7 @@ var preamble = "The results are shown below:"
 
 var tasks = {
   speaker: {
-    frequencies: [20],
+    frequencies: [70],
     prompt: "The results of the experiment with SPECIAL were found.",
     utterance: "SPECIAL TARGET.",
     question: "Does SPECIAL QUERY?",
