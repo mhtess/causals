@@ -43,12 +43,14 @@ function make_slides(f) {
      },
      button : function() {
        var response = $("#catch").val()
-       var numericResponse = parseInt($("#resultRetrieval").val())
+       var numericResponse = $("#resultRetrieval").val();
+       var passNumeric = parseInt(numericResponse) ?
+          exp.stimscopy[0].data.indexOf(parseInt(numericResponse)) != -1 ? 1 : 0 :0
        if ( (response == 99) || numericResponse == "") {
          $(".err").show();
        } else {
          var passStory = (response == exp.stimscopy[0].story) ?  1 : 0;
-         var passNumeric = exp.stimscopy[0].data.indexOf(numericResponse) != -1 ? 1 : 0;
+         // var passNumeric = exp.stimscopy[0].data.indexOf(numericResponse) != -1 ? 1 : 0;
          exp.catch_trials.push({
            response_story: response,
            actual_story: exp.stimscopy[0].story,
