@@ -115,7 +115,7 @@ Cost = 540 * 0.25 = 135 + 27 = 162
 
 ## Causals 8
 
-Endorsement task.
+### Endorsement task
 
 - Prior: 4 distributions (rare vs. common X weak vs. deterministic)
 - 1 Frequency (20)
@@ -128,3 +128,11 @@ Cost = 200 * 0.25 = 50 + 10 = 60
 5/18/2017
 + 1 frequency (70)
 + 200 participants
+
+### Prior measurement
+
+- Prior: 4 distributions (rare vs. common X weak vs. deterministic)
+- comparable to endorsement task
+- n = 40 / distribution
+
+Cost = 160 * 0.25 = 40 + 8 = 48
