@@ -1073,18 +1073,303 @@ d8.summary <- d8.filtered %>%
   multi_boot_standard(column = "response") %>%
   ungroup()
 
+d8.bayes <- d8.filtered %>%
+  group_by(distribution, frequency) %>%
+  summarize(k = sum(response), n = n()) %>%
+  ungroup() %>%
+  mutate(a = 1 + k,
+         b = 1 + n - k,
+         low  = qbeta(.025, a, b),
+         high = qbeta(.975, a, b),
+         MAP_h = (a-1)/(a+b-2),
+         mean = a / (a + b))
 
-ggplot(d8.summary, aes( x = factor(frequency), y = mean, ymin = ci_lower, ymax = ci_upper, fill = distribution,
+ggplot(d8.bayes, aes( x = factor(frequency), y = MAP_h, ymin = low, ymax = high, fill = distribution,
+#ggplot(d8.summary, aes( x = factor(frequency), y = mean, ymin = ci_lower, ymax = ci_upper, fill = distribution,
                         group = distribution))+
-  geom_bar(stat='identity', position = position_dodge(), width = 0.3, color = 'black')+
-  geom_errorbar(width = 0.2, position = position_dodge(0.3))+
+  geom_bar(stat='identity', position = position_dodge(), width = 0.3, color = 'white')+
+  geom_errorbar(width = 0.2, position = position_dodge(0.3), color = 'white')+
   theme(axis.text.x = element_text(angle = 90))+
-  geom_hline(yintercept = 0.5, lty = 3)+
+  geom_hline(yintercept = 0.5, lty = 3, color = 'white')+
   scale_y_continuous(limits = c(0, 1), breaks = c(0,0.5, 1))+
   scale_fill_solarized()+
   xlab("Frequency")+
-  ylab("Proportion Causal Endorsement")
+  ylab("Proportion Causal Endorsement")+
+  theme_black()
+
+ggsave("~/Documents/research/talks/generics/a-generic-workshop-2017-comgen/img/causals-pilot-8.pdf", width = 5, height = 3)
 ```
 
 
 
+# Pilot 8 b
+
+Endorsement Pilot -- 4 Prior
+
+Same as Pilot 8, but 
+
+- 70% target frequency
+
+```{r}
+d8b.info <- readSubjectInfo("pilot-causals-8-b")
+
+table(d8b.info$enjoyment)
+```
+
+
+```{r}
+d8b.info %>% select(comments) %>%
+  filter(comments != "") %>% kable()
+```
+
+```{r}
+d8b.info %>% select(problems) %>%  filter(problems != "") %>%kable()
+```
+
+```{r}
+d8b.catch <- readCatchTrials("pilot-causals-8-b")
+
+d8b.catch <- d8b.catch %>% mutate(passBoth = ifelse(pass_numeric + pass_story == 2, 1, 0))
+  
+sum(d8b.catch$passBoth)
+```
+
+```{r}
+d8b <- left_join(readData("pilot-causals-8-b"), d8b.catch %>% select(workerid, passBoth))
+```
+
+
+```{r}
+
+d8b.filtered <- d8b %>% filter(passBoth == 1)
+
+d8b.filtered %>%
+  group_by(distribution) %>%
+  summarize(n = n()) %>% kable()
+```
+
+```{r fig.width = 6}
+d8b.summary <- d8b.filtered %>%
+  group_by(distribution, frequency) %>%
+  multi_boot_standard(column = "response") %>%
+  ungroup()
+
+d8b.bayes <- d8b.filtered %>%
+  group_by(distribution, frequency) %>%
+  summarize(k = sum(response), n = n()) %>%
+  ungroup() %>%
+  mutate(a = 1 + k,
+         b = 1 + n - k,
+         low  = qbeta(.025, a, b),
+         high = qbeta(.975, a, b),
+         MAP_h = (a-1)/(a+b-2),
+         mean = a / (a + b))
+bind_rows(d8.bayes, d8b.bayes) %>% 
+  mutate(Distribution = factor(distribution, 
+                               levels = c("common_deterministic", "rare_deterministic", "common_weak", "rare_weak"),
+         labels = c("Common Deterministic", "Rare Deterministic",
+                    "Common Weak", "Rare Weak"))) %>%
+ggplot(., aes( x = factor(frequency), y = MAP_h, ymin = low, ymax = high, fill = Distribution, color = Distribution,
+#ggplot(d8.summary, aes( x = factor(frequency), y = mean, ymin = ci_lower, ymax = ci_upper, fill = distribution,
+                        group = distribution))+
+  geom_bar(stat='identity', position = position_dodge(0.4), width = 0.4, color = 'white')+
+  geom_errorbar(width = 0.2, position = position_dodge(0.4), color= 'white')+
+  theme(axis.text.x = element_text(angle = 90))+
+  geom_hline(yintercept = 0.5, lty = 3, color = 'white')+
+  scale_y_continuous(limits = c(0, 1), breaks = c(0,0.5, 1))+
+  #scale_fill_brewer(palette = 3, type = 'qual')+
+  scale_fill_manual(values = c("#d01c8b", "#f1b6da", "#4dac26", "#b8e186"))+
+  scale_color_manual(values = c("#d01c8b", "#f1b6da", "#4dac26", "#b8e186"))+
+#  scale_fill_manual(values = c("#d7191c", "#fdae61", "#2c7bb6", "#abd9e9"))+
+ # scale_color_manual(values = c("#d7191c", "#fdae61", "#2c7bb6", "#abd9e9"))+
+  xlab("Frequency")+
+  ylab("Proportion Endorsement")+
+  theme_black()
+
+
+# bind_rows(d8.bayes, d8b.bayes) %>% 
+#   mutate(Distribution = factor(distribution, 
+#                                levels = c("common_deterministic", "rare_deterministic", "common_weak", "rare_weak"),
+#          labels = c("Common Deterministic", "Rare Deterministic",
+#                     "Common Weak", "Rare Weak"))) %>%
+# ggplot(., aes( x = factor(frequency), y = MAP_h, ymin = low, ymax = high, color = Distribution,
+# #ggplot(d8.summary, aes( x = factor(frequency), y = mean, ymin = ci_lower, ymax = ci_upper, fill = distribution,
+#                         group = distribution))+
+#   geom_linerange(position = position_dodge(0.2), size = 2)+
+#   #geom_errorbar(width = 0.2, position = position_dodge(0.3), color = 'white')+
+#   theme(axis.text.x = element_text(angle = 90))+
+#   geom_hline(yintercept = 0.5, lty = 3, color = 'white')+
+#   scale_y_continuous(limits = c(0, 1), breaks = c(0,0.5, 1))+
+#   #scale_fill_brewer(palette = 3, type = 'qual')+
+#   scale_color_manual(values = c("#d7191c", "#fdae61", "#2c7bb6", "#abd9e9"))+
+#   xlab("Frequency")+
+#   ylab("Proportion Endorsement")+
+#   theme_black()
+
+
+ggsave("~/Documents/research/talks/generics/a-generic-workshop-2017-comgen/img/causals-pilot-8-n400.pdf", width = 5, height = 3)
+```
+
+
+
+```{r}
+ggplot(data.frame(x = rbeta(n = 10000, shape1 = 4, shape2 = 2)), aes(x = x))+ 
+  geom_density(fill = "#f1b6da", adjust = 1.3, alpha =0.8, 
+               color = "#f1b6da", size = 1.2)+ 
+  scale_x_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1))+
+  theme_black()+
+  ylab("Prior Belief")+
+  xlab("Target probability")
+
+ggsave("~/Documents/research/talks/generics/a-generic-workshop-2017-comgen/img/a-prior.pdf", width = 5, height = 3)
+```
+
+
+```{r}
+sample.dists <- bind_rows(
+  data.frame(
+    dist = "rare weak",
+    x = c(rbeta(n = 3000, shape1 = 2, shape2 = 10),
+          rbeta(n = 7000, shape1 = 2, shape2 = 50)
+          )
+  ),
+  data.frame(
+    dist = "common weak",
+    x = rbeta(n = 10000, shape1 = 2, shape2 = 10)
+  ),
+  data.frame(
+    dist = "rare deterministic",
+    x = c(rbeta(n = 3000, shape1 = 50, shape2 = 2),
+          rbeta(n = 7000, shape1 = 2, shape2 = 50)
+          )
+  ),
+  data.frame(
+    dist = "common deterministic",
+    x = rbeta(n = 10000, shape1 = 50, shape2 = 2)
+  )
+) %>%
+    mutate(Distribution = factor(dist, 
+                               levels = c("common deterministic", "rare deterministic", "common weak", "rare weak"),
+         labels = c("Common Deterministic", "Rare Deterministic",
+                    "Common Weak", "Rare Weak")))
+  
+  
+  
+
+ggplot(sample.dists, aes(x = x, fill = Distribution, color = Distribution))+ 
+  geom_density( adjust = 1.3, alpha =0.8, 
+               size = 1.2,
+               aes( y = ..scaled..))+ #
+  scale_x_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1))+
+  scale_y_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1))+
+  theme_black()+
+    scale_fill_manual(values = c("#d01c8b", "#f1b6da", "#4dac26", "#b8e186"))+
+  scale_color_manual(values = c("#d01c8b", "#f1b6da", "#4dac26", "#b8e186"))+
+  ylab("Scaled Prior Probability")+
+  xlab("Target probability")+
+  facet_wrap(~Distribution, scales = 'free')+
+  guides(fill = F, color = F)
+
+ggsave("~/Documents/research/talks/generics/a-generic-workshop-2017-comgen/img/causal-manipulated-priors.pdf", width = 5, height = 3)
+```
+
+
+
+# Causals 8 prior
+
+```{r}
+d8.info <- readSubjectInfo("causals-8-prior")
+
+table(d8.info$enjoyment)
+```
+
+```{r}
+d8.info %>% select(comments) %>%
+  filter(comments != "") %>% kable()
+```
+
+```{r}
+d8.info %>% select(problems) %>%  filter(problems != "") %>%kable()
+```
+
+
+
+```{r}
+d8.prior.catch <- readCatchTrials("causals-8-prior")
+
+mischaracterized <- c( 24, 48, 62, 94, 106, 110, 111, 112, 113, 116, 125, 132, 145, 155, 158)
+
+d8.prior.catch <- d8.prior.catch %>%
+  mutate(pass_numeric = ifelse(workerid %in% mischaracterized, 1, pass_numeric),
+         passBoth = ifelse(pass_numeric + pass_story == 2, 1, 0))
+
+  
+sum(d8.prior.catch$passBoth)
+```
+
+Mis-characterized: 24, 48, 62, 94, 106, 110, 111, 112, 113, 116, 125, 132, 145, 155, 158
+
+i think these were mischaracterized because they put "0", or they put "0/100"
+
+
+```{r}
+d8.prior <- readData("causals-8-prior")
+
+d8.prior <- left_join(readData("causals-8-prior"), d8.prior.catch %>% select(workerid, passBoth)) %>%
+  filter(passBoth == 1)
+
+```
+
+Time spent on trial
+
+```{r}
+d8.prior.rt <- unique(d8.prior %>% select(workerid, rt)) %>%
+  mutate(logrt = log(rt / 1000))
+
+
+d8.prior.rt.stats <- d8.prior.rt %>% 
+  summarize(meanRT = mean(rt / 1000),
+            sdRT = sd(rt / 1000),
+            meanLogRT = mean(logrt),
+            sdLogRT = sd(logrt))
+
+ggplot(d8.prior.rt, aes( x = rt/1000))+
+  geom_histogram()
+
+```
+
+
+How many participants per distribution
+
+```{r}
+d8.prior %>%
+  group_by(distribution, condition) %>%
+  summarize(n = n()) %>% 
+  mutate(n = ifelse(condition == "prior", n / 5, n)) %>%
+  kable()
+```
+
+
+### Prior data
+
+```{r fig.width = 4, fig.height = 5}
+ggplot(d8.prior, aes(x = response))+
+  geom_histogram(aes(y=(..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..])) + 
+  facet_grid(distribution~., scales = 'free')+
+  theme(strip.text.y = element_text(angle = 0))+ ylab("proportion")
+  
+```
+
+```{r}
+ggplot(d8.prior, aes(x = response))+
+  geom_histogram(aes(y=(..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..])) + 
+  facet_grid(story~., scales = 'free')+
+  theme(strip.text.y = element_text(angle = 0))+ ylab("proportion")
+```
+
+```{r}
+ggplot(d8.prior, aes(x = response))+
+  geom_histogram()+
+  facet_grid(story~distribution, scales = 'free')+
+  theme(strip.text.y = element_text(angle = 0))
+```

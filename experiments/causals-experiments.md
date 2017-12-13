@@ -136,3 +136,4 @@ Cost = 200 * 0.25 = 50 + 10 = 60
 - n = 40 / distribution
 
 Cost = 160 * 0.25 = 40 + 8 = 48
+(17 batches + batch of 7)
